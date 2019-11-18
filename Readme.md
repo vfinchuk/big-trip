@@ -1,7 +1,7 @@
 # Личный проект «Большое путешествие» [![Build status][travis-image]][travis-url]
 
 * Студент: [Vladimir Finchuk](https://up.htmlacademy.ru/ecmascript/10/user/890035).
-* Наставник: `Неизвестно`.
+* Наставник: Александр Тимоновский.
 
 ---
 
