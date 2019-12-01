@@ -38,40 +38,38 @@ render(tripMainMenuTitle, createMainMenuTemplate(MenuNames), `afterend`);
 render(tripControlsElement, createFilterTemplate(FilterNames), `beforeend`);
 
 
-/* render sort-form, add-form, tripDayBoard elements */
 const tripEventsElement = document.querySelector(`.trip-events`);
-render(tripEventsElement, createSortTemplate(), `beforeend`);
-render(tripEventsElement, createAddTripFormTemplate(), `beforeend`);
-render(tripEventsElement, createTripDayBoardTemplate(), `beforeend`);
-
 
 const tripEvents = generateTripEvents(TRIP_EVENT_COUNT);
-const tripDayBoard = tripEventsElement.querySelector(`.trip-days`);
 
 tripEvents.sort((prev, it) => {
-  const prevItem = new Date(prev.time.start);
-  const item = new Date(it.time.start);
+  const prevItemDate = new Date(prev.time.start);
+  const itemDate = new Date(it.time.start);
 
-  return prevItem - item;
+  return prevItemDate - itemDate;
 });
 
 
-/* render tripDayItem element */
+render(tripEventsElement, createSortTemplate(), `beforeend`);
+render(tripEventsElement, createAddTripFormTemplate(tripEvents[0]), `beforeend`);
+render(tripEventsElement, createTripDayBoardTemplate(), `beforeend`);
+
+
+const tripDayBoard = tripEventsElement.querySelector(`.trip-days`);
 
 render(tripDayBoard, createTripDayItemTemplate(tripEvents), `beforeend`);
 const tripDayItem = tripEventsElement.querySelectorAll(`.trip-days__item`);
 
 
-tripEvents.forEach((event) => {
-
+tripEvents.forEach((point) => {
   tripDayItem.forEach((dayItem) => {
     const tripEventBoard = dayItem.querySelector(`.trip-events__list`);
 
-    const eventDate = formatDate(event.time.start);
+    const eventDate = formatDate(point.time.start);
     const dayItemDate = dayItem.querySelector(`.day__date`).getAttribute(`datetime`);
 
     if (Date.parse(eventDate) === Date.parse(dayItemDate)) {
-      render(tripEventBoard, createTripEventTemplate(event), `beforeend`);
+      render(tripEventBoard, createTripEventTemplate(point), `beforeend`);
     }
   });
 
