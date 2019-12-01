@@ -1,5 +1,5 @@
 import {getRandomArrayItem, getRandomIntegerNumber} from '../utils';
-import {AdditionalServices, Cities, EventTypes, Description} from '../const';
+import {Services, Cities, TransferTypes, Description} from '../const';
 
 
 const generateDescription = (description) => {
@@ -63,12 +63,12 @@ const generateSchedule = () => {
 const generateTripEvent = () => {
 
   return {
-    type: getRandomArrayItem(EventTypes),
+    type: getRandomArrayItem(TransferTypes),
     city: getRandomArrayItem(Cities),
     photos: generateEventPhotos(getRandomIntegerNumber(2, 7)),
     time: generateSchedule(),
     price: getRandomIntegerNumber(10, 150),
-    additionalServices: generateAdditionalServices(AdditionalServices),
+    extraServices: generateAdditionalServices(Services),
     description: generateDescription(Description),
   };
 
@@ -83,4 +83,4 @@ const generateTripEvents = (count) => {
 
 };
 
-export {EventTypes, generateTripEvent, generateTripEvents};
+export {TransferTypes, generateTripEvent, generateTripEvents};
