@@ -72,10 +72,10 @@ const createPhotosMarup = (photos) => {
 };
 
 
-export const createAddTripFormTemplate = (event) => {
+export const createAddTripFormTemplate = (point) => {
 
 
-  const {type, city, price, photos, time, extraServices, description} = event;
+  const {type, city, price, photos, time, extraServices, description} = point;
   const {start, end} = time;
 
   const transferTypes = createEventTypeMarkup(TransferTypes, type);

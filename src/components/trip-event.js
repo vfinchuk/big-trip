@@ -18,9 +18,9 @@ const generateAdditionalServicesMarkup = (options) => {
 };
 
 
-export const createTripEventTemplate = (event) => {
+export const createTripEventTemplate = (point) => {
 
-  const {type, city, price, time, extraServices} = event;
+  const {type, city, price, time, extraServices} = point;
 
   const {start, end, duration} = time;
 

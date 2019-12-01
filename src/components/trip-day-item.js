@@ -19,11 +19,11 @@ const createTripDayItemMarkup = (dayCount, date) => {
   );
 };
 
-export const createTripDayItemTemplate = (events) => {
+export const createTripDayItemTemplate = (points) => {
 
   let dayCount = 0;
 
-  return events.map((it, i, array) => {
+  return points.map((it, i, array) => {
 
     const itemTimeStamp = Date.parse(formatDate(it.time.start));
     let nextItemTimeStamp;
