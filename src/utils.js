@@ -38,3 +38,17 @@ export const getRandomArrayItem = (array) => {
 
   return array[randomArrayIndex];
 };
+
+
+export const getTripTotalAmount = (points) => {
+  return points.reduce((sum, item) => {
+
+    sum += Array.from(item.extraServices).reduce((servicesSum, service) => {
+      servicesSum += service.price;
+      return servicesSum;
+    }, 0);
+    sum += item.price;
+
+    return sum;
+  }, 0);
+};
