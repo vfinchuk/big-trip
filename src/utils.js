@@ -17,6 +17,16 @@ export const formatTime = (date, withDate = false) => {
   return `${hours}:${minutes}`;
 };
 
+export const convertMinutesToHours = (minutes) => {
+  if (minutes < 60) {
+    return `${minutes}M`;
+  } else if (minutes % 60 === 0) {
+    return `${minutes / 60 }H`;
+  } else {
+    return `${ Math.floor(minutes / 60) }H ${minutes % 60}M`;
+  }
+};
+
 
 export const getRandomIntegerNumber = (min, max) => {
   const rand = min + Math.random() * (max + 1 - min);
