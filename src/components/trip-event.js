@@ -20,7 +20,7 @@ const generateAdditionalServicesMarkup = (options) => {
 
 export const createTripEventTemplate = (event) => {
 
-  const {type, city, price, time, additionalServices} = event;
+  const {type, city, price, time, extraServices} = event;
 
   const {start, end, duration} = time;
 
@@ -32,7 +32,7 @@ export const createTripEventTemplate = (event) => {
 
   const durationTime = convertMinutesToHours(duration);
 
-  const offers = generateAdditionalServicesMarkup(additionalServices);
+  const services = generateAdditionalServicesMarkup(extraServices);
 
   return (
     `<li class="trip-events__item">
@@ -57,7 +57,7 @@ export const createTripEventTemplate = (event) => {
 
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
-          ${offers}
+          ${services}
         </ul>
 
         <button class="event__rollup-btn" type="button">
