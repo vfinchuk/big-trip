@@ -32,7 +32,7 @@ const tripMainMenuTitle = headerElement.querySelectorAll(`h2`)[0];
 
 /* render header elements */
 render(tripInfoElement, createTripInfoTemplate(), `afterbegin`);
-render(tripMainMenuTitle, createMainMenuTemplate(), `afterend`);
+render(tripMainMenuTitle, createMainMenuTemplate(menuNames), `afterend`);
 render(tripControlsElement, createFilterTemplate(filterNames), `beforeend`);
 
 
