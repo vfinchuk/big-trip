@@ -1,57 +1,6 @@
 import {getRandomArrayItem, getRandomIntegerNumber} from '../utils';
+import {AdditionalServices, Cities, EventTypes, Description} from '../const';
 
-
-const Description = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`;
-
-
-const EventTypes = [
-  `bus`,
-  `drive`,
-  `flight`,
-  `ship`,
-  `taxi`,
-  `train`,
-  `transport`,
-  `trip`,
-  `check-in`,
-  `restaurant`,
-  `sightseeing`,
-];
-
-
-const Cities = [
-  `Amsterdam`,
-  `Berlin`,
-  `Stockholm`,
-  `Geneva`,
-  `Milan`,
-  `Paris`,
-  `Barcelona`
-];
-
-
-const AdditionalServices = [
-  {
-    type: `Add`,
-    name: `luggage`,
-    price: 10
-  },
-  {
-    type: `Switch`,
-    name: `to comfort class`,
-    price: 150
-  },
-  {
-    type: `Add`,
-    name: `meal`,
-    price: 2
-  },
-  {
-    type: `Chose`,
-    name: `seats`,
-    price: 9
-  },
-];
 
 const generateDescription = (description) => {
   const sentences = description.split(`. `);
