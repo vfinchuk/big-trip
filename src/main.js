@@ -7,7 +7,8 @@ import {createTripDayBoardTemplate} from './components/trip-day-board';
 import {createTripDayItemTemplate} from './components/trip-day-item';
 import {createTripEventTemplate} from './components/trip-event';
 
-import {filterNames} from './mock/filter';
+import {filterNames, menuNames} from './const';
+
 import {generateTripEvents} from './mock/trip-event';
 
 const TRIP_EVENT_COUNT = 5;
