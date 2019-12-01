@@ -1,4 +1,4 @@
-import {formatTime, convertMinutesToHours} from '../utils';
+import {formatTime, formatDate, convertMinutesToHours} from '../utils';
 
 
 const generateAdditionalServices = (options) => {
@@ -27,8 +27,8 @@ export const createTripEventTemplate = (event) => {
   const startTime = formatTime(start);
   const endTime = formatTime(end);
 
-  const startDate = formatTime(start, true);
-  const endDate = formatTime(end, true);
+  const startDate = formatDate(start);
+  const endDate = formatDate(end);
 
   const durationTime = convertMinutesToHours(duration);
 
@@ -44,9 +44,9 @@ export const createTripEventTemplate = (event) => {
 
         <div class="event__schedule">
           <p class="event__time">
-            <time class="event__start-time" datetime="${startDate}">${startTime}</time>
+            <time class="event__start-time" datetime="${startDate}T${startTime}">${startTime}</time>
             &mdash;
-            <time class="event__end-time" datetime="${endDate}">${endTime}</time>
+            <time class="event__end-time" datetime="${endDate}T${endTime}">${endTime}</time>
           </p>
           <p class="event__duration">${durationTime}</p>
         </div>
