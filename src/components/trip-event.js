@@ -1,7 +1,7 @@
 import {formatTime, formatDate, convertMinutesToHours} from '../utils';
 
 
-const generateAdditionalServices = (options) => {
+const generateAdditionalServicesMarkup = (options) => {
   return Array.from(options)
     .map((option) => {
       const {type, name, price} = option;
@@ -32,7 +32,7 @@ export const createTripEventTemplate = (event) => {
 
   const durationTime = convertMinutesToHours(duration);
 
-  const offers = generateAdditionalServices(additionalServices);
+  const offers = generateAdditionalServicesMarkup(additionalServices);
 
   return (
     `<li class="trip-events__item">
