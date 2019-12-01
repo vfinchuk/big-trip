@@ -1,3 +1,18 @@
-export const menuNames = [`table`, `stats`];
+export const MenuNames = [`table`, `stats`];
 
-export const filterNames = [`everything`, `future`, `past`];
+export const FilterNames = [`everything`, `future`, `past`];
+
+export const MonthNames = [
+  `January`,
+  `February`,
+  `March`,
+  `April`,
+  `May`,
+  `June`,
+  `July`,
+  `August`,
+  `September`,
+  `October`,
+  `November`,
+  `December`,
+];
