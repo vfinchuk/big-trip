@@ -1,4 +1,4 @@
-import {formatDate} from './utils';
+import {formatDate, getTripTotalAmount} from './utils';
 import {createTripInfoTemplate} from './components/trip-info';
 import {createMainMenuTemplate} from './components/main-menu';
 import {createFilterTemplate} from './components/filter';
@@ -38,30 +38,32 @@ render(tripMainMenuTitle, createMainMenuTemplate(MenuNames), `afterend`);
 render(tripControlsElement, createFilterTemplate(FilterNames), `beforeend`);
 
 
-const tripEventsElement = document.querySelector(`.trip-events`);
+const tripPointsElement = document.querySelector(`.trip-events`);
 
-const tripEvents = generateTripEvents(TRIP_EVENT_COUNT);
+const tripPoints = generateTripEvents(TRIP_EVENT_COUNT);
 
-tripEvents.sort((prev, it) => {
+tripPoints.sort((prev, it) => {
   const prevItemDate = new Date(prev.time.start);
   const itemDate = new Date(it.time.start);
 
   return prevItemDate - itemDate;
 });
 
+const totalAmountElement = headerElement.querySelector(`.trip-info__cost-value`);
+totalAmountElement.textContent = getTripTotalAmount(tripPoints);
 
-render(tripEventsElement, createSortTemplate(), `beforeend`);
-render(tripEventsElement, createAddTripFormTemplate(tripEvents[0]), `beforeend`);
-render(tripEventsElement, createTripDayBoardTemplate(), `beforeend`);
-
-
-const tripDayBoard = tripEventsElement.querySelector(`.trip-days`);
-
-render(tripDayBoard, createTripDayItemTemplate(tripEvents), `beforeend`);
-const tripDayItem = tripEventsElement.querySelectorAll(`.trip-days__item`);
+render(tripPointsElement, createSortTemplate(), `beforeend`);
+render(tripPointsElement, createAddTripFormTemplate(tripPoints[0]), `beforeend`);
+render(tripPointsElement, createTripDayBoardTemplate(), `beforeend`);
 
 
-tripEvents.forEach((point) => {
+const tripDayBoard = tripPointsElement.querySelector(`.trip-days`);
+
+render(tripDayBoard, createTripDayItemTemplate(tripPoints), `beforeend`);
+const tripDayItem = tripPointsElement.querySelectorAll(`.trip-days__item`);
+
+
+tripPoints.forEach((point) => {
   tripDayItem.forEach((dayItem) => {
     const tripEventBoard = dayItem.querySelector(`.trip-events__list`);
 
@@ -72,5 +74,4 @@ tripEvents.forEach((point) => {
       render(tripEventBoard, createTripEventTemplate(point), `beforeend`);
     }
   });
-
 });
