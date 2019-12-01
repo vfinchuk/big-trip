@@ -7,9 +7,10 @@ import {createTripDayBoardTemplate} from './components/trip-day-board';
 import {createTripDayItemTemplate} from './components/trip-day-item';
 import {createTripEventTemplate} from './components/trip-event';
 
+import {filterNames} from './mock/filter';
+import {generateTripEvents} from './mock/trip-event';
 
-const TRIP_EVENT_COUNT = 3;
-
+const TRIP_EVENT_COUNT = 5;
 
 /**
  * Rendering template
@@ -31,7 +32,7 @@ const tripMainMenuTitle = headerElement.querySelectorAll(`h2`)[0];
 /* render header elements */
 render(tripInfoElement, createTripInfoTemplate(), `afterbegin`);
 render(tripMainMenuTitle, createMainMenuTemplate(), `afterend`);
-render(tripControlsElement, createFilterTemplate(), `beforeend`);
+render(tripControlsElement, createFilterTemplate(filterNames), `beforeend`);
 
 
 /* render sort-form, add-form, tripDayBoard elements */
@@ -45,9 +46,9 @@ const tripDayBoard = tripEventsElement.querySelector(`.trip-days`);
 render(tripDayBoard, createTripDayItemTemplate(), `beforeend`);
 
 /* render trip events a day */
+const tripEvents = generateTripEvents(TRIP_EVENT_COUNT);
 const tripEventBoard = tripEventsElement.querySelector(`.trip-events__list`);
-new Array(TRIP_EVENT_COUNT)
-  .fill(``)
-  .forEach(
-      () => render(tripEventBoard, createTripEventTemplate(), `beforeend`)
-  );
+
+tripEvents.slice(0, TRIP_EVENT_COUNT).forEach((event) => {
+  render(tripEventBoard, createTripEventTemplate(event), `beforeend`);
+});
