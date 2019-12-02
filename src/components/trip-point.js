@@ -1,4 +1,4 @@
-import {formatTime, formatDate, convertMinutesToHours} from '../utils';
+import {createElement, formatTime, formatDate, convertMinutesToHours} from '../utils';
 
 const generateAdditionalServicesMarkup = (options) => {
   return Array.from(options)
@@ -17,7 +17,7 @@ const generateAdditionalServicesMarkup = (options) => {
 };
 
 
-export const createTripEventTemplate = (point) => {
+export const createTripPointTemplate = (point) => {
 
   const {type, city, price, time, extraServices} = point;
 
@@ -65,4 +65,29 @@ export const createTripEventTemplate = (point) => {
       </div>
     </li>`
   );
+};
+
+
+export default class TripPoint {
+  constructor(point) {
+    this._point = point;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createTripPointTemplate(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
 };

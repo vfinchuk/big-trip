@@ -6,7 +6,7 @@ import {createSortTemplate} from './components/sort';
 import {createTripPointEditFormTemplate} from './components/trip-point-edit-form';
 import {createBoardTemplate} from './components/board';
 import {createTripDayTemplate} from './components/trip-day';
-import {createTripEventTemplate} from './components/trip-event';
+import {createTripPointTemplate} from './components/trip-point';
 
 
 import {FilterNames, MenuNames} from './const';
@@ -62,7 +62,7 @@ tripPoints.forEach((point) => {
     const dayItemDate = dayItem.querySelector(`.day__date`).getAttribute(`datetime`);
 
     if (Date.parse(eventDate) === Date.parse(dayItemDate)) {
-      render(tripEventBoard, createTripEventTemplate(point), `beforeend`);
+      render(tripEventBoard, createTripPointTemplate(point), `beforeend`);
     }
   });
 });
