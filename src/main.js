@@ -2,7 +2,6 @@ import {FilterNames, MenuNames} from './const';
 import {formatDate, getTripTotalAmount, render, RenderPosition} from './utils';
 import {generateTripEvents} from './mock/trip-event';
 
-
 import SiteMenuComponent from './components/site-menu';
 import TripInfoComponent from './components/trip-info';
 import FilterComponent from './components/filter';
@@ -12,9 +11,24 @@ import BoardComponent from './components/board';
 import TripDayComponent from './components/trip-day';
 import TripPointComponent from './components/trip-point';
 
+const TRIP_EVENT_COUNT = 10;
 
-const TRIP_EVENT_COUNT = 20;
+const renderTripPoint = (point, dayItemElement) => {
+  const tripPoint = new TripPointComponent(point);
+  const editTripPoint = new TripPointEditFormComponent(point);
 
+  const editButton = tripPoint.getElement().querySelector(`.event__rollup-btn`);
+  editButton.addEventListener(`click`, () => {
+    dayItemElement.replaceChild(editTripPoint.getElement(), tripPoint.getElement());
+  });
+
+  const editForm = editTripPoint.getElement();
+  editForm.addEventListener(`submit`, () => {
+    dayItemElement.replaceChild(tripPoint.getElement(), editTripPoint.getElement());
+  });
+
+  render(dayItemElement, tripPoint.getElement(), RenderPosition.BEFOREEND);
+};
 
 /* header elements */
 const headerElement = document.querySelector(`.page-header`);
@@ -24,11 +38,8 @@ const tripMainMenuTitle = headerElement.querySelectorAll(`h2`)[0];
 
 /* render header elements */
 render(tripInfoElement, new TripInfoComponent().getElement(), RenderPosition.AFTERBEGIN);
-
 render(tripMainMenuTitle, new SiteMenuComponent(MenuNames).getElement(), RenderPosition.AFTEREND);
-
 render(tripControlsElement, new FilterComponent(FilterNames).getElement(), RenderPosition.BEFOREEND);
-
 
 const tripPoints = generateTripEvents(TRIP_EVENT_COUNT);
 
@@ -43,11 +54,7 @@ const totalAmountElement = headerElement.querySelector(`.trip-info__cost-value`)
 totalAmountElement.textContent = getTripTotalAmount(tripPoints);
 
 const tripEventsElement = document.querySelector(`.trip-events`);
-
-
-
 render(tripEventsElement, new SortComponent().getElement(), RenderPosition.BEFOREEND);
-render(tripEventsElement, new TripPointEditFormComponent(tripPoints[0]).getElement(), RenderPosition.BEFOREEND);
 
 
 const boardComponent = new BoardComponent();
@@ -68,7 +75,8 @@ tripPoints.forEach((point) => {
     const dayItemDate = dayItem.querySelector(`.day__date`).getAttribute(`datetime`);
 
     if (Date.parse(eventDate) === Date.parse(dayItemDate)) {
-      render(tripEventBoard, new TripPointComponent(point).getElement(), RenderPosition.BEFOREEND);
+
+      renderTripPoint(point, tripEventBoard);
     }
   });
 });
