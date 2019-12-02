@@ -38,7 +38,7 @@ export default class Sort {
   }
 
   getTemplate() {
-    return createSortTemplate(this._filters);
+    return createSortTemplate();
   }
 
   getElement() {
