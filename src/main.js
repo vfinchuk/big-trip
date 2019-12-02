@@ -1,6 +1,6 @@
 import {formatDate, getTripTotalAmount} from './utils';
 import {createTripInfoTemplate} from './components/trip-info';
-import {createMainMenuTemplate} from './components/main-menu';
+import {createSiteMenuTemplate} from './components/site-menu';
 import {createFilterTemplate} from './components/filter';
 import {createSortTemplate} from './components/sort';
 import {createAddTripFormTemplate} from './components/add-trip-form';
@@ -25,7 +25,7 @@ const tripMainMenuTitle = headerElement.querySelectorAll(`h2`)[0];
 
 /* render header elements */
 render(tripInfoElement, createTripInfoTemplate(), `afterbegin`);
-render(tripMainMenuTitle, createMainMenuTemplate(MenuNames), `afterend`);
+render(tripMainMenuTitle, createSiteMenuTemplate(MenuNames), `afterend`);
 render(tripControlsElement, createFilterTemplate(FilterNames), `beforeend`);
 
 
