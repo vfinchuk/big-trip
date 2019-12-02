@@ -5,7 +5,7 @@ import {createFilterTemplate} from './components/filter';
 import {createSortTemplate} from './components/sort';
 import {createTripPointEditFormTemplate} from './components/trip-point-edit-form';
 import {createBoardTemplate} from './components/board';
-import {createTripDayItemTemplate} from './components/trip-day-item';
+import {createTripDayTemplate} from './components/trip-day';
 import {createTripEventTemplate} from './components/trip-event';
 
 
@@ -50,7 +50,7 @@ render(tripPointsElement, createBoardTemplate(), `beforeend`);
 
 const tripDayBoard = tripPointsElement.querySelector(`.trip-days`);
 
-render(tripDayBoard, createTripDayItemTemplate(tripPoints), `beforeend`);
+render(tripDayBoard, createTripDayTemplate(tripPoints), `beforeend`);
 const tripDayItem = tripPointsElement.querySelectorAll(`.trip-days__item`);
 
 

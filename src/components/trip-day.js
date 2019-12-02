@@ -1,7 +1,7 @@
-import {formatDate} from '../utils';
+import {createElement, formatDate} from '../utils';
 import {MonthNames} from '../const';
 
-const createTripDayItemMarkup = (dayCount, date) => {
+const createTripDayMarkup = (dayCount, date) => {
 
   const day = new Date(date).getDate();
   const monthNumber = new Date(date).getMonth();
@@ -19,7 +19,7 @@ const createTripDayItemMarkup = (dayCount, date) => {
   );
 };
 
-export const createTripDayItemTemplate = (points) => {
+export const createTripDayTemplate = (points) => {
 
   let dayCount = 0;
 
@@ -36,11 +36,36 @@ export const createTripDayItemTemplate = (points) => {
 
     if (itemTimeStamp !== nextItemTimeStamp) {
       dayCount++;
-      return createTripDayItemMarkup(dayCount, formatDate(it.time.start));
+      return createTripDayMarkup(dayCount, formatDate(it.time.start));
     }
 
     return ``;
   })
     .join(`\n`);
 
+};
+
+
+export default class TripDay {
+  constructor(points) {
+    this._points = points;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createTripDayTemplate(this._points);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
 };
