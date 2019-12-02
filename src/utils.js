@@ -58,11 +58,11 @@ export const getTripTotalAmount = (points) => {
   }, 0);
 };
 
-export const createElement = (template) => {
+export const createElement = (template, returnNodeList = false) => {
   const newElement = document.createElement(`div`);
   newElement.innerHTML = template;
 
-  return newElement.firstChild;
+  return returnNodeList ? newElement : newElement.firstChild;
 };
 
 export const render = (container, element, place) => {
