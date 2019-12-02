@@ -71,7 +71,7 @@ const createPhotosMarkup = (photos) => {
 };
 
 
-export const createTripEditFormTemplate = (point) => {
+const createTripPointEditFormTemplate = (point) => {
 
 
   const {type, city, price, photos, time, extraServices, description} = point;
@@ -174,15 +174,15 @@ export const createTripEditFormTemplate = (point) => {
 };
 
 
-export default class TripEditForm {
-  constructor(filters) {
-    this._filters = filters;
+export default class TripPointEditForm {
+  constructor(point) {
+    this._point = point;
 
     this._element = null;
   }
 
   getTemplate() {
-    return createAddTripFormTemplate(this._filters);
+    return createTripPointEditFormTemplate(this._point);
   }
 
   getElement() {
