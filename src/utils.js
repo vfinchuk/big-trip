@@ -1,6 +1,7 @@
 export const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
-  BEFOREEND: `beforeend`
+  BEFOREEND: `beforeend`,
+  AFTEREND: `afterend`
 };
 
 const castTimeFormat = (value) => {
@@ -72,6 +73,10 @@ export const render = (container, element, place) => {
       break;
     case RenderPosition.BEFOREEND:
       container.append(element);
+      break;
+    case RenderPosition.AFTEREND:
+      container.append(element);
+      container.insertAdjacentElement(RenderPosition.AFTEREND, element);
       break;
   }
 };
