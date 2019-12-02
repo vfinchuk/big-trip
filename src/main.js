@@ -6,7 +6,7 @@ import SiteMenuComponent from './components/site-menu';
 import TripInfoComponent from './components/trip-info';
 import FilterComponent from './components/filter';
 import SortComponent from './components/sort';
-import TripPointEditFormComponent from './components/trip-point-edit-form';
+import TripPointEditComponent from './components/trip-point-edit';
 import BoardComponent from './components/board';
 import TripDayComponent from './components/trip-day';
 import TripPointComponent from './components/trip-point';
@@ -15,7 +15,7 @@ const TRIP_EVENT_COUNT = 10;
 
 const renderTripPoint = (point, dayItemElement) => {
   const tripPoint = new TripPointComponent(point);
-  const editTripPoint = new TripPointEditFormComponent(point);
+  const editTripPoint = new TripPointEditComponent(point);
 
   const editButton = tripPoint.getElement().querySelector(`.event__rollup-btn`);
   editButton.addEventListener(`click`, () => {
