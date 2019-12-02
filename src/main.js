@@ -3,7 +3,7 @@ import {createTripInfoTemplate} from './components/trip-info';
 import {createSiteMenuTemplate} from './components/site-menu';
 import {createFilterTemplate} from './components/filter';
 import {createSortTemplate} from './components/sort';
-import {createTripEditFormTemplate} from './components/trip-edit-form';
+import {createTripPointEditFormTemplate} from './components/trip-point-edit-form';
 import {createTripDayBoardTemplate} from './components/trip-day-board';
 import {createTripDayItemTemplate} from './components/trip-day-item';
 import {createTripEventTemplate} from './components/trip-event';
@@ -44,7 +44,7 @@ const totalAmountElement = headerElement.querySelector(`.trip-info__cost-value`)
 totalAmountElement.textContent = getTripTotalAmount(tripPoints);
 
 render(tripPointsElement, createSortTemplate(), `beforeend`);
-render(tripPointsElement, createTripEditFormTemplate(tripPoints[0]), `beforeend`);
+render(tripPointsElement, createTripPointEditFormTemplate(tripPoints[0]), `beforeend`);
 render(tripPointsElement, createTripDayBoardTemplate(), `beforeend`);
 
 

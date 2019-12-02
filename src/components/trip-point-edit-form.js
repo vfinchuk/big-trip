@@ -1,6 +1,5 @@
 import {EventTypes, Cities, Services} from '../const';
-import {formatDate, formatTime} from '../utils';
-
+import {createElement, formatDate, formatTime} from '../utils';
 
 const createEventTypeMarkup = (types, currentType) => {
   return types.map((type, index) => {
@@ -72,7 +71,7 @@ const createPhotosMarkup = (photos) => {
 };
 
 
-export const createAddTripFormTemplate = (point) => {
+export const createTripEditFormTemplate = (point) => {
 
 
   const {type, city, price, photos, time, extraServices, description} = point;
@@ -172,4 +171,29 @@ export const createAddTripFormTemplate = (point) => {
       </section>
     </form>`
   );
+};
+
+
+export default class TripEditForm {
+  constructor(filters) {
+    this._filters = filters;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createAddTripFormTemplate(this._filters);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
 };
