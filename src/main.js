@@ -10,20 +10,11 @@ import {createTripEventTemplate} from './components/trip-event';
 
 
 import {FilterNames, MenuNames} from './const';
-
 import {generateTripEvents} from './mock/trip-event';
 
-const TRIP_EVENT_COUNT = 20;
+import {render, RenderPosition} from './utils';
 
-/**
- * Rendering template
- * @param {node} container - where to render template
- * @param {string} template - rendering template
- * @param {string} place - rendering position
- */
-const render = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
+const TRIP_EVENT_COUNT = 20;
 
 
 /* header elements */
