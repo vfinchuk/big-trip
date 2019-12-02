@@ -4,7 +4,7 @@ import {createSiteMenuTemplate} from './components/site-menu';
 import {createFilterTemplate} from './components/filter';
 import {createSortTemplate} from './components/sort';
 import {createTripPointEditFormTemplate} from './components/trip-point-edit-form';
-import {createTripDayBoardTemplate} from './components/trip-day-board';
+import {createBoardTemplate} from './components/board';
 import {createTripDayItemTemplate} from './components/trip-day-item';
 import {createTripEventTemplate} from './components/trip-event';
 
@@ -45,7 +45,7 @@ totalAmountElement.textContent = getTripTotalAmount(tripPoints);
 
 render(tripPointsElement, createSortTemplate(), `beforeend`);
 render(tripPointsElement, createTripPointEditFormTemplate(tripPoints[0]), `beforeend`);
-render(tripPointsElement, createTripDayBoardTemplate(), `beforeend`);
+render(tripPointsElement, createBoardTemplate(), `beforeend`);
 
 
 const tripDayBoard = tripPointsElement.querySelector(`.trip-days`);
