@@ -1,4 +1,4 @@
-import {TransferTypes, ActivityTypes, Cities, Services} from '../const';
+import {EventTypes, Cities, Services} from '../const';
 import {formatDate, formatTime} from '../utils';
 
 
@@ -62,7 +62,7 @@ const createAdditionalServicesMarkup = (services, currentServices) => {
    .join(`\n`);
 };
 
-const createPhotosMarup = (photos) => {
+const createPhotosMarkup = (photos) => {
   return photos.map((photo) => {
     return (
       `<img class="event__photo" src="${photo}" alt="Event photo">`
@@ -78,8 +78,9 @@ export const createAddTripFormTemplate = (point) => {
   const {type, city, price, photos, time, extraServices, description} = point;
   const {start, end} = time;
 
-  const transferTypes = createEventTypeMarkup(TransferTypes, type);
-  const activityTypes = createEventTypeMarkup(ActivityTypes, type);
+  const transferTypes = createEventTypeMarkup(EventTypes.slice(0, 7), type);
+  const activityTypes = createEventTypeMarkup(EventTypes.slice(7), type);
+
   const destinations = createDestinationMarkup(Cities, city);
 
   const startTime = formatTime(start);
@@ -90,7 +91,7 @@ export const createAddTripFormTemplate = (point) => {
 
   const services = createAdditionalServicesMarkup(Services, extraServices);
 
-  const images = createPhotosMarup(photos);
+  const images = createPhotosMarkup(photos);
 
   return (
     `<form class="trip-events__item  event  event--edit" action="#" method="post">

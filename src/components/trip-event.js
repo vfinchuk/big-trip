@@ -1,6 +1,5 @@
 import {formatTime, formatDate, convertMinutesToHours} from '../utils';
 
-
 const generateAdditionalServicesMarkup = (options) => {
   return Array.from(options)
     .map((option) => {

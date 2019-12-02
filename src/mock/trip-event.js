@@ -1,5 +1,5 @@
 import {getRandomArrayItem, getRandomIntegerNumber} from '../utils';
-import {Services, Cities, TransferTypes, Description} from '../const';
+import {Services, Cities, EventTypes, Description} from '../const';
 
 
 const generateDescription = (description) => {
@@ -63,7 +63,7 @@ const generateSchedule = () => {
 const generateTripEvent = () => {
 
   return {
-    type: getRandomArrayItem(TransferTypes),
+    type: getRandomArrayItem(EventTypes),
     city: getRandomArrayItem(Cities),
     photos: generateEventPhotos(getRandomIntegerNumber(2, 7)),
     time: generateSchedule(),
@@ -83,4 +83,4 @@ const generateTripEvents = (count) => {
 
 };
 
-export {TransferTypes, generateTripEvent, generateTripEvents};
+export {generateTripEvent, generateTripEvents};
