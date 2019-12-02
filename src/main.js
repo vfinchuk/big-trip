@@ -25,7 +25,7 @@ const tripMainMenuTitle = headerElement.querySelectorAll(`h2`)[0];
 /* render header elements */
 render(tripInfoElement, new TripInfoComponent().getElement(), RenderPosition.AFTERBEGIN);
 
-// render(tripMainMenuTitle, createSiteMenuTemplate(MenuNames), `afterend`);
+render(tripMainMenuTitle, new SiteMenuComponent(MenuNames).getElement(), RenderPosition.AFTEREND);
 
 render(tripControlsElement, new FilterComponent(FilterNames).getElement(), RenderPosition.BEFOREEND);
 
