@@ -68,4 +68,4 @@ export default class TripDay {
   removeElement() {
     this._element = null;
   }
-};
+}

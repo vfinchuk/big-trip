@@ -22,4 +22,4 @@ export default class Board {
   removeElement() {
     this._element = null;
   }
-};
+}

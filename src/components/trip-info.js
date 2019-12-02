@@ -27,4 +27,4 @@ export default class TripInfo {
   removeElement() {
     this._element = null;
   }
-};
+}

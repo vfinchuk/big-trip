@@ -52,4 +52,4 @@ export default class Sort {
   removeElement() {
     this._element = null;
   }
-};
+}

@@ -196,4 +196,4 @@ export default class TripPointEditForm {
   removeElement() {
     this._element = null;
   }
-};
+}
