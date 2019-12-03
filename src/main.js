@@ -63,20 +63,16 @@ render(tripEventsElement, boardComponent.getElement(), RenderPosition.BEFOREEND)
 
 render(boardComponent.getElement(), new TripDayComponent(tripPoints).getElement(), RenderPosition.BEFOREEND);
 
-const tripDayItem = boardComponent.getElement().querySelectorAll(`.trip-days__item`);
+const tripDays = boardComponent.getElement().querySelectorAll(`.trip-days__item`);
 
+tripDays.forEach((day) => {
+  const tripPointList = day.querySelector(`.trip-events__list`);
+  const dayDate = day.querySelector(`.day__date`).getAttribute(`datetime`);
 
-tripPoints.forEach((point) => {
-  tripDayItem.forEach((dayItem) => {
-
-    const tripEventBoard = dayItem.querySelector(`.trip-events__list`);
-
-    const eventDate = moment(point.time.start).format(`YYYY-MM-DD`);
-    const dayItemDate = dayItem.querySelector(`.day__date`).getAttribute(`datetime`);
-
-    if (Date.parse(eventDate) === Date.parse(dayItemDate)) {
-
-      renderTripPoint(point, tripEventBoard);
+  tripPoints.filter((point) => {
+    const pointDate = moment(point.time.start).format(`YYYY-MM-DD`);
+    if (pointDate === dayDate) {
+      renderTripPoint(point, tripPointList);
     }
   });
 });
