@@ -1,4 +1,5 @@
-import {formatTime, formatDate, convertMinutesToHours} from '../utils';
+import {moment} from '../const';
+import {createElement, convertMinutesToHours} from '../utils';
 
 const generateAdditionalServicesMarkup = (options) => {
   return Array.from(options)
@@ -17,17 +18,17 @@ const generateAdditionalServicesMarkup = (options) => {
 };
 
 
-export const createTripEventTemplate = (point) => {
+export const createTripPointTemplate = (point) => {
 
   const {type, city, price, time, extraServices} = point;
 
   const {start, end, duration} = time;
 
-  const startTime = formatTime(start);
-  const endTime = formatTime(end);
+  const startTime = moment(start).format(`HH:mm`);
+  const endTime = moment(end).format(`HH:mm`);
 
-  const startDate = formatDate(start);
-  const endDate = formatDate(end);
+  const startDate = moment(start).format(`YYYY-MM-DD`);
+  const endDate = moment(end).format(`YYYY-MM-DD`);
 
   const durationTime = convertMinutesToHours(duration);
 
@@ -66,3 +67,28 @@ export const createTripEventTemplate = (point) => {
     </li>`
   );
 };
+
+
+export default class TripPoint {
+  constructor(point) {
+    this._point = point;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createTripPointTemplate(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

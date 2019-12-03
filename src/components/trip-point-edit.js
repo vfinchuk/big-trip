@@ -1,6 +1,5 @@
-import {EventTypes, Cities, Services} from '../const';
-import {formatDate, formatTime} from '../utils';
-
+import {moment, EventTypes, Cities, Services} from '../const';
+import {createElement} from '../utils';
 
 const createEventTypeMarkup = (types, currentType) => {
   return types.map((type, index) => {
@@ -72,7 +71,7 @@ const createPhotosMarkup = (photos) => {
 };
 
 
-export const createAddTripFormTemplate = (point) => {
+const createTripPointEditTemplate = (point) => {
 
 
   const {type, city, price, photos, time, extraServices, description} = point;
@@ -83,11 +82,11 @@ export const createAddTripFormTemplate = (point) => {
 
   const destinations = createDestinationMarkup(Cities, city);
 
-  const startTime = formatTime(start);
-  const endTime = formatTime(end);
+  const startTime = moment(start).format(`HH:mm`);
+  const endTime = moment(end).format(`HH:mm`);
 
-  const startDate = formatDate(start).replace(/\-/g, `/`);
-  const endDate = formatDate(end).replace(/\-/g, `/`);
+  const startDate = moment(start).format(`YYYY/MM/DD`);
+  const endDate = moment(end).format(`YYYY/MM/DD`);
 
   const services = createAdditionalServicesMarkup(Services, extraServices);
 
@@ -173,3 +172,28 @@ export const createAddTripFormTemplate = (point) => {
     </form>`
   );
 };
+
+
+export default class TripPointEdit {
+  constructor(point) {
+    this._point = point;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createTripPointEditTemplate(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

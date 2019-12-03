@@ -1,19 +1,14 @@
 import {createElement} from '../utils';
 
-const createTripInfoTemplate = () => `<div class="trip-info__main">
-      <h1 class="trip-info__title">Amsterdam &mdash; ... &mdash; Amsterdam</h1>
+const createBoardTemplate = () => `<ul class="trip-days"></ul>`;
 
-      <p class="trip-info__dates">Mar 18&nbsp;&mdash;&nbsp;21</p>
-    </div>`;
-
-
-export default class TripInfo {
+export default class Board {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createTripInfoTemplate();
+    return createBoardTemplate(this._filters);
   }
 
   getElement() {

@@ -1,20 +1,7 @@
-const castTimeFormat = (value) => {
-  return value < 10 ? `0${value}` : String(value);
-};
-
-export const formatTime = (date) => {
-  const hours = castTimeFormat(date.getHours());
-  const minutes = castTimeFormat(date.getMinutes());
-
-  return `${hours}:${minutes}`;
-};
-
-export const formatDate = (date) => {
-  const year = castTimeFormat(date.getFullYear());
-  const month = castTimeFormat(date.getMonth());
-  const day = castTimeFormat(date.getDate());
-
-  return `${year}-${month}-${day}`;
+export const RenderPosition = {
+  AFTERBEGIN: `afterbegin`,
+  BEFOREEND: `beforeend`,
+  AFTEREND: `afterend`
 };
 
 export const convertMinutesToHours = (minutes) => {
@@ -51,4 +38,26 @@ export const getTripTotalAmount = (points) => {
 
     return sum;
   }, 0);
+};
+
+export const createElement = (template, returnNodeList = false) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
+
+  return returnNodeList ? newElement : newElement.firstChild;
+};
+
+export const render = (container, element, place) => {
+  switch (place) {
+    case RenderPosition.AFTERBEGIN:
+      container.prepend(element);
+      break;
+    case RenderPosition.BEFOREEND:
+      container.append(element);
+      break;
+    case RenderPosition.AFTEREND:
+      container.append(element);
+      container.insertAdjacentElement(RenderPosition.AFTEREND, element);
+      break;
+  }
 };

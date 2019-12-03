@@ -1,3 +1,5 @@
+export const moment = require(`moment`);
+
 export const MenuNames = [`table`, `stats`];
 
 export const FilterNames = [`everything`, `future`, `past`];
