@@ -4,25 +4,6 @@ export const RenderPosition = {
   AFTEREND: `afterend`
 };
 
-const castTimeFormat = (value) => {
-  return value < 10 ? `0${value}` : String(value);
-};
-
-export const formatTime = (date) => {
-  const hours = castTimeFormat(date.getHours());
-  const minutes = castTimeFormat(date.getMinutes());
-
-  return `${hours}:${minutes}`;
-};
-
-export const formatDate = (date) => {
-  const year = castTimeFormat(date.getFullYear());
-  const month = castTimeFormat(date.getMonth());
-  const day = castTimeFormat(date.getDate());
-
-  return `${year}-${month}-${day}`;
-};
-
 export const convertMinutesToHours = (minutes) => {
   if (minutes < 60) {
     return `${minutes}M`;
