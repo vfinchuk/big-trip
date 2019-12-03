@@ -1,5 +1,5 @@
-import {EventTypes, Cities, Services} from '../const';
-import {createElement, formatDate, formatTime} from '../utils';
+import {moment, EventTypes, Cities, Services} from '../const';
+import {createElement} from '../utils';
 
 const createEventTypeMarkup = (types, currentType) => {
   return types.map((type, index) => {
@@ -82,11 +82,11 @@ const createTripPointEditTemplate = (point) => {
 
   const destinations = createDestinationMarkup(Cities, city);
 
-  const startTime = formatTime(start);
-  const endTime = formatTime(end);
+  const startTime = moment(start).format(`HH:mm`);
+  const endTime = moment(end).format(`HH:mm`);
 
-  const startDate = formatDate(start).replace(/\-/g, `/`);
-  const endDate = formatDate(end).replace(/\-/g, `/`);
+  const startDate = moment(start).format(`YYYY/MM/DD`);
+  const endDate = moment(end).format(`YYYY/MM/DD`);
 
   const services = createAdditionalServicesMarkup(Services, extraServices);
 

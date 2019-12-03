@@ -1,5 +1,5 @@
-import {createElement, formatDate} from '../utils';
-import {MonthNames} from '../const';
+import {createElement} from '../utils';
+import {moment, MonthNames} from '../const';
 
 const createTripDayMarkup = (dayCount, date) => {
 
@@ -25,18 +25,18 @@ export const createTripDayTemplate = (points) => {
 
   return points.map((it, i, array) => {
 
-    const itemTimeStamp = Date.parse(formatDate(it.time.start));
+    const itemTimeStamp = Date.parse(moment(it.time.start).format(`YYYY-MM-DD`));
     let nextItemTimeStamp;
 
     if (i === (array.length - 1)) {
       nextItemTimeStamp = 0;
     } else {
-      nextItemTimeStamp = Date.parse(formatDate(array[i + 1].time.start));
+      nextItemTimeStamp = Date.parse(moment(array[i + 1].time.start).format(`YYYY-MM-DD`));
     }
 
     if (itemTimeStamp !== nextItemTimeStamp) {
       dayCount++;
-      return createTripDayMarkup(dayCount, formatDate(it.time.start));
+      return createTripDayMarkup(dayCount, moment(it.time.start).format(`YYYY-MM-DD`));
     }
 
     return ``;

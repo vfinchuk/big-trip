@@ -1,4 +1,5 @@
-import {createElement, formatTime, formatDate, convertMinutesToHours} from '../utils';
+import {moment} from '../const';
+import {createElement, convertMinutesToHours} from '../utils';
 
 const generateAdditionalServicesMarkup = (options) => {
   return Array.from(options)
@@ -23,11 +24,11 @@ export const createTripPointTemplate = (point) => {
 
   const {start, end, duration} = time;
 
-  const startTime = formatTime(start);
-  const endTime = formatTime(end);
+  const startTime = moment(start).format(`HH:mm`);
+  const endTime = moment(end).format(`HH:mm`);
 
-  const startDate = formatDate(start);
-  const endDate = formatDate(end);
+  const startDate = moment(start).format(`YYYY-MM-DD`);
+  const endDate = moment(end).format(`YYYY-MM-DD`);
 
   const durationTime = convertMinutesToHours(duration);
 

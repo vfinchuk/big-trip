@@ -1,5 +1,5 @@
-import {FilterNames, MenuNames} from './const';
-import {formatDate, getTripTotalAmount, render, RenderPosition} from './utils';
+import {moment, FilterNames, MenuNames} from './const';
+import {getTripTotalAmount, render, RenderPosition} from './utils';
 import {generateTripEvents} from './mock/trip-event';
 
 import SiteMenuComponent from './components/site-menu';
@@ -71,7 +71,7 @@ tripPoints.forEach((point) => {
 
     const tripEventBoard = dayItem.querySelector(`.trip-events__list`);
 
-    const eventDate = formatDate(point.time.start);
+    const eventDate = moment(point.time.start).format(`YYYY-MM-DD`);
     const dayItemDate = dayItem.querySelector(`.day__date`).getAttribute(`datetime`);
 
     if (Date.parse(eventDate) === Date.parse(dayItemDate)) {
