@@ -20,29 +20,20 @@ const createTripDayMarkup = (dayCount, date) => {
 };
 
 export const createTripDayTemplate = (points) => {
-
   let dayCount = 0;
 
-  return points.map((it, i, array) => {
+  return points.map((point, index, array) => {
+    const pointTimeStamp = Date.parse(moment(point.time.start).format(`YYYY-MM-DD`));
+    const nextPointTimeStamp = index === (array.length - 1) ? 0 : Date.parse(moment(array[index + 1].time.start).format(`YYYY-MM-DD`));
 
-    const itemTimeStamp = Date.parse(moment(it.time.start).format(`YYYY-MM-DD`));
-    let nextItemTimeStamp;
-
-    if (i === (array.length - 1)) {
-      nextItemTimeStamp = 0;
-    } else {
-      nextItemTimeStamp = Date.parse(moment(array[i + 1].time.start).format(`YYYY-MM-DD`));
-    }
-
-    if (itemTimeStamp !== nextItemTimeStamp) {
+    if (pointTimeStamp !== nextPointTimeStamp) {
       dayCount++;
-      return createTripDayMarkup(dayCount, moment(it.time.start).format(`YYYY-MM-DD`));
+      return createTripDayMarkup(dayCount, moment(point.time.start).format(`YYYY-MM-DD`));
     }
 
     return ``;
   })
     .join(`\n`);
-
 };
 
 
