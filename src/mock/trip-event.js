@@ -42,7 +42,7 @@ export const generateEventPhotos = (count) => {
 const generateSchedule = () => {
   const startDate = new Date();
   const sign = Math.random() > 0.5 ? 1 : -1;
-  const diffDayValue = sign * getRandomIntegerNumber(0, 7);
+  const diffDayValue = getRandomIntegerNumber(1, 7);
   const diffTimeValue = sign * getRandomIntegerNumber(0, 23);
   const durationMinutes = getRandomIntegerNumber(30, 300);
 
