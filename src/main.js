@@ -10,6 +10,7 @@ import TripPointEditComponent from './components/trip-point-edit';
 import BoardComponent from './components/board';
 import TripDayComponent from './components/trip-day';
 import TripPointComponent from './components/trip-point';
+import NoPointsComponent from './components/no-points';
 
 const TRIP_EVENT_COUNT = 10;
 
@@ -71,25 +72,30 @@ const totalAmountElement = headerElement.querySelector(`.trip-info__cost-value`)
 totalAmountElement.textContent = getTripTotalAmount(tripPoints);
 
 const tripEventsElement = document.querySelector(`.trip-events`);
-render(tripEventsElement, new SortComponent().getElement(), RenderPosition.BEFOREEND);
 
+if (tripPoints.length > 0) {
+  render(tripEventsElement, new SortComponent().getElement(), RenderPosition.BEFOREEND);
 
-const boardComponent = new BoardComponent();
-render(tripEventsElement, boardComponent.getElement(), RenderPosition.BEFOREEND);
+  const boardComponent = new BoardComponent();
+  render(tripEventsElement, boardComponent.getElement(), RenderPosition.BEFOREEND);
 
+  render(boardComponent.getElement(), new TripDayComponent(tripPoints).getElement(), RenderPosition.BEFOREEND);
 
-render(boardComponent.getElement(), new TripDayComponent(tripPoints).getElement(), RenderPosition.BEFOREEND);
+  const tripDays = boardComponent.getElement().querySelectorAll(`.trip-days__item`);
 
-const tripDays = boardComponent.getElement().querySelectorAll(`.trip-days__item`);
+  tripDays.forEach((day) => {
+    const tripPointList = day.querySelector(`.trip-events__list`);
+    const dayDate = day.querySelector(`.day__date`).getAttribute(`datetime`);
 
-tripDays.forEach((day) => {
-  const tripPointList = day.querySelector(`.trip-events__list`);
-  const dayDate = day.querySelector(`.day__date`).getAttribute(`datetime`);
-
-  tripPoints.filter((point) => {
-    const pointDate = moment(point.time.start).format(`YYYY-MM-DD`);
-    if (pointDate === dayDate) {
-      renderTripPoint(tripPointList, point);
-    }
+    tripPoints.filter((point) => {
+      const pointDate = moment(point.time.start).format(`YYYY-MM-DD`);
+      if (pointDate === dayDate) {
+        renderTripPoint(tripPointList, point);
+      }
+    });
   });
-});
+} else {
+  render(tripEventsElement, new NoPointsComponent().getElement(), RenderPosition.BEFOREEND);
+}
+
+
