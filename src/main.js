@@ -74,15 +74,24 @@ totalAmountElement.textContent = getTripTotalAmount(tripPoints);
 const tripEventsElement = document.querySelector(`.trip-events`);
 
 if (tripPoints.length > 0) {
+
   render(tripEventsElement, new SortComponent().getElement(), RenderPosition.BEFOREEND);
 
   const boardComponent = new BoardComponent();
   render(tripEventsElement, boardComponent.getElement(), RenderPosition.BEFOREEND);
 
-  render(boardComponent.getElement(), new TripDayComponent(tripPoints).getElement(), RenderPosition.BEFOREEND);
+  let TripDayCount = 1;
+  tripPoints.forEach((point, index, array) => {
+    const pointDate = moment(array[index].time.start).format(`YYYY-MM-DD`);
+    const nexPointDate = index !== array.length - 1 ? moment(array[index + 1].time.start).format(`YYYY-MM-DD`) : false;
+
+    if (nexPointDate !== pointDate) {
+      render(boardComponent.getElement(), new TripDayComponent(point, TripDayCount).getElement(), RenderPosition.BEFOREEND);
+      TripDayCount++;
+    }
+  });
 
   const tripDays = boardComponent.getElement().querySelectorAll(`.trip-days__item`);
-
   tripDays.forEach((day) => {
     const tripPointList = day.querySelector(`.trip-events__list`);
     const dayDate = day.querySelector(`.day__date`).getAttribute(`datetime`);
@@ -94,8 +103,11 @@ if (tripPoints.length > 0) {
       }
     });
   });
+
 } else {
+
   render(tripEventsElement, new NoPointsComponent().getElement(), RenderPosition.BEFOREEND);
+
 }
 
 
