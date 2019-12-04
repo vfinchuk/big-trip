@@ -24,7 +24,9 @@ export const createTripDayTemplate = (points) => {
 
   return points.map((point, index, array) => {
     const pointTimeStamp = Date.parse(moment(point.time.start).format(`YYYY-MM-DD`));
-    const nextPointTimeStamp = index === (array.length - 1) ? 0 : Date.parse(moment(array[index + 1].time.start).format(`YYYY-MM-DD`));
+    const nextPointTimeStamp = index === (array.length - 1)
+      ? pointTimeStamp
+      : Date.parse(moment(array[index + 1].time.start).format(`YYYY-MM-DD`));
 
     if (pointTimeStamp !== nextPointTimeStamp) {
       dayCount++;
