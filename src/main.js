@@ -13,19 +13,36 @@ import TripPointComponent from './components/trip-point';
 
 const TRIP_EVENT_COUNT = 10;
 
-const renderTripPoint = (point, dayItemElement) => {
+const renderTripPoint = (dayItemElement, point) => {
+
+  const onEscapeKeyDown = (evt) => {
+    const isEscapeKey = evt.key === `Escape` || evt.key === `Esc`;
+    if (isEscapeKey) {
+      replaceEditToPoint();
+      document.removeEventListener(`keydown`, onEscapeKeyDown);
+    }
+  };
+
+  const replaceEditToPoint = () => {
+    dayItemElement.replaceChild(tripPoint.getElement(), editTripPoint.getElement());
+  };
+
+  const replacePointToEdit = () => {
+
+    dayItemElement.replaceChild(editTripPoint.getElement(), tripPoint.getElement());
+  };
+
   const tripPoint = new TripPointComponent(point);
   const editTripPoint = new TripPointEditComponent(point);
 
   const editButton = tripPoint.getElement().querySelector(`.event__rollup-btn`);
   editButton.addEventListener(`click`, () => {
-    dayItemElement.replaceChild(editTripPoint.getElement(), tripPoint.getElement());
+    replacePointToEdit();
+    document.addEventListener(`keydown`, onEscapeKeyDown);
   });
 
   const editForm = editTripPoint.getElement();
-  editForm.addEventListener(`submit`, () => {
-    dayItemElement.replaceChild(tripPoint.getElement(), editTripPoint.getElement());
-  });
+  editForm.addEventListener(`submit`, () => replaceEditToPoint);
 
   render(dayItemElement, tripPoint.getElement(), RenderPosition.BEFOREEND);
 };
@@ -72,7 +89,7 @@ tripDays.forEach((day) => {
   tripPoints.filter((point) => {
     const pointDate = moment(point.time.start).format(`YYYY-MM-DD`);
     if (pointDate === dayDate) {
-      renderTripPoint(point, tripPointList);
+      renderTripPoint(tripPointList, point);
     }
   });
 });
