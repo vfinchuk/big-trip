@@ -55,9 +55,7 @@ const renderTripPoint = (dayItemElement, point) => {
   render(dayItemElement, tripPoint.getElement(), RenderPosition.BEFOREEND);
 };
 
-/**
- * Sorting tripPoints data by start date
- */
+/* Sorting tripPoints data by start date */
 const tripPoints = generateTripEvents(TRIP_EVENT_COUNT);
 tripPoints.sort((prev, it) => {
   const prevItemDate = new Date(prev.time.start);
@@ -66,32 +64,29 @@ tripPoints.sort((prev, it) => {
   return prevItemDate - itemDate;
 });
 
-/* header elements */
+/* Header elements */
 const headerElement = document.querySelector(`.page-header`);
 const tripInfoElement = headerElement.querySelector(`.trip-info`);
 const tripControlsElement = headerElement.querySelector(`.trip-controls`);
-const tripMainMenuTitle = headerElement.querySelectorAll(`h2`)[0];
-const totalAmountElement = headerElement.querySelector(`.trip-info__cost-value`);
-/* render header elements */
-render(tripInfoElement, new TripInfoComponent().getElement(), RenderPosition.AFTERBEGIN);
-render(tripMainMenuTitle, new SiteMenuComponent(MenuNames).getElement(), RenderPosition.AFTEREND);
-render(tripControlsElement, new FilterComponent(FilterNames).getElement(), RenderPosition.BEFOREEND);
 
-/* show total trip sum */
+/* Render header elements */
+render(tripInfoElement, new TripInfoComponent().getElement(), RenderPosition.AFTERBEGIN);
+render(tripControlsElement.children[0], new SiteMenuComponent(MenuNames).getElement(), RenderPosition.AFTEREND);
+render(tripControlsElement.children[1], new FilterComponent(FilterNames).getElement(), RenderPosition.AFTEREND);
+
+/* Show total trip sum */
+const totalAmountElement = headerElement.querySelector(`.trip-info__cost-value`);
 totalAmountElement.textContent = getTripTotalAmount(tripPoints);
 
 const tripEventsElement = document.querySelector(`.trip-events`);
 if (tripPoints.length > 0) {
-
   const boardComponent = new BoardComponent();
 
-  /* rendering sort and tripBoard elements */
+  /* Rendering sort and tripBoard elements */
   render(tripEventsElement, new SortComponent().getElement(), RenderPosition.BEFOREEND);
   render(tripEventsElement, boardComponent.getElement(), RenderPosition.BEFOREEND);
 
-  /**
-   * Rendering trip day elements
-   */
+  /* Rendering trip day elements */
   let TripDayCount = 1;
   tripPoints.forEach((point, index, array) => {
     const pointDate = moment(array[index].time.start).format(`YYYY-MM-DD`);
@@ -103,9 +98,7 @@ if (tripPoints.length > 0) {
     }
   });
 
-  /**
-   * Rendering trip point elements
-   */
+  /* Rendering trip point elements */
   const tripDays = boardComponent.getElement().querySelectorAll(`.trip-days__item`);
   tripDays.forEach((day) => {
     const tripPointList = day.querySelector(`.trip-events__list`);
@@ -121,7 +114,7 @@ if (tripPoints.length > 0) {
 
 } else {
 
-  /* rendering no trip points massage */
+  /* Rendering no trip points massage */
   render(tripEventsElement, new NoPointsComponent().getElement(), RenderPosition.BEFOREEND);
 }
 
