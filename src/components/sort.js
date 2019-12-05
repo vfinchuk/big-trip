@@ -1,6 +1,6 @@
 import {createElement} from '../utils';
 
-export const createSortTemplate = () => `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
+const createSortTemplate = () => `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
       <span class="trip-sort__item  trip-sort__item--day">Day</span>
 
       <div class="trip-sort__item  trip-sort__item--event">

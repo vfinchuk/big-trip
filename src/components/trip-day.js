@@ -1,7 +1,9 @@
 import {createElement} from '../utils';
 import {moment, MonthNames} from '../const';
 
-const createTripDayMarkup = (dayCount, date) => {
+const createTripDayTemplate = (point, dayCount) => {
+
+  const date = moment(point.time.start).format(`YYYY-MM-DD`);
 
   const day = new Date(date).getDate();
   const monthNumber = new Date(date).getMonth();
@@ -19,38 +21,22 @@ const createTripDayMarkup = (dayCount, date) => {
   );
 };
 
-export const createTripDayTemplate = (points) => {
-  let dayCount = 0;
-
-  return points.map((point, index, array) => {
-    const pointTimeStamp = Date.parse(moment(point.time.start).format(`YYYY-MM-DD`));
-    const nextPointTimeStamp = index === (array.length - 1) ? 0 : Date.parse(moment(array[index + 1].time.start).format(`YYYY-MM-DD`));
-
-    if (pointTimeStamp !== nextPointTimeStamp) {
-      dayCount++;
-      return createTripDayMarkup(dayCount, moment(point.time.start).format(`YYYY-MM-DD`));
-    }
-
-    return ``;
-  })
-    .join(`\n`);
-};
-
 
 export default class TripDay {
-  constructor(points) {
-    this._points = points;
+  constructor(point, dayCount) {
+    this._dayCount = dayCount;
+    this._point = point;
 
     this._element = null;
   }
 
   getTemplate() {
-    return createTripDayTemplate(this._points);
+    return createTripDayTemplate(this._point, this._dayCount);
   }
 
   getElement() {
     if (!this._element) {
-      this._element = createElement(this.getTemplate(), true);
+      this._element = createElement(this.getTemplate());
     }
 
     return this._element;

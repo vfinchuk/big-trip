@@ -18,7 +18,7 @@ const generateAdditionalServicesMarkup = (options) => {
 };
 
 
-export const createTripPointTemplate = (point) => {
+const createTripPointTemplate = (point) => {
 
   const {type, city, price, time, extraServices} = point;
 
