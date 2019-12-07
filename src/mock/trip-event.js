@@ -53,7 +53,7 @@ const getRandomLocation = (locations, eventType) => {
 
 let lastPointDate = Date.now();
 
-const getTripPoint = () => {
+export const getTripPoint = () => {
 
   const dateStart = getRandomIntegerNumber(
     lastPointDate,
@@ -113,13 +113,13 @@ const getTripPoint = () => {
 };
 
 
-const getTripPoints = (count) => {
+export const getTripPoints = (count) => {
   return new Array(count)
     .fill(``)
     .map(getTripPoint);
 };
 
-const groupTripPointsByDay = (events) => {
+export const groupTripPointsByDay = (events) => {
   let counter = 1;
   return events.reduce((days, point) => {
     let currentDay = new Date(point.dateStart).setHours(0, 0, 0, 0);
@@ -139,5 +139,3 @@ const groupTripPointsByDay = (events) => {
     return days;
   }, new Map());
 };
-
-export {getTripPoint, getTripPoints, groupTripPointsByDay};
