@@ -1,6 +1,5 @@
 /* Import utils and constants */
-import {moment, FilterNames, MenuNames} from './const';
-import {getTripTotalAmount, render, RenderPosition} from './utils';
+import {moment, getTripTotalAmount, render, RenderPosition} from './utils';
 import {generateTripEvents} from './mock/trip-event';
 
 /* Import app components */
@@ -57,12 +56,12 @@ const renderTripPoint = (dayItemElement, point) => {
 
 /* Sorting tripPoints data by start date */
 const tripPoints = generateTripEvents(TRIP_EVENT_COUNT);
-tripPoints.sort((prev, it) => {
-  const prevItemDate = new Date(prev.time.start);
-  const itemDate = new Date(it.time.start);
-
-  return prevItemDate - itemDate;
-});
+// tripPoints.sort((prev, it) => {
+//   const prevItemDate = new Date(prev.time.start);
+//   const itemDate = new Date(it.time.start);
+//
+//   return prevItemDate - itemDate;
+// });
 
 /* Header elements */
 const headerElement = document.querySelector(`.page-header`);
@@ -71,12 +70,12 @@ const tripControlsElement = headerElement.querySelector(`.trip-controls`);
 
 /* Render header elements */
 render(tripInfoElement, new TripInfoComponent().getElement(), RenderPosition.AFTERBEGIN);
-render(tripControlsElement.children[0], new SiteMenuComponent(MenuNames).getElement(), RenderPosition.AFTEREND);
-render(tripControlsElement.children[1], new FilterComponent(FilterNames).getElement(), RenderPosition.AFTEREND);
+render(tripControlsElement.children[0], new SiteMenuComponent().getElement(), RenderPosition.AFTEREND);
+render(tripControlsElement.children[1], new FilterComponent().getElement(), RenderPosition.AFTEREND);
 
 /* Show total trip sum */
-const totalAmountElement = headerElement.querySelector(`.trip-info__cost-value`);
-totalAmountElement.textContent = getTripTotalAmount(tripPoints);
+// const totalAmountElement = headerElement.querySelector(`.trip-info__cost-value`);
+// totalAmountElement.textContent = getTripTotalAmount(tripPoints);
 
 const tripEventsElement = document.querySelector(`.trip-events`);
 if (tripPoints.length > 0) {
@@ -89,8 +88,8 @@ if (tripPoints.length > 0) {
   /* Rendering trip day elements */
   let TripDayCount = 1;
   tripPoints.forEach((point, index, array) => {
-    const pointDate = moment(array[index].time.start).format(`YYYY-MM-DD`);
-    const nexPointDate = index !== array.length - 1 ? moment(array[index + 1].time.start).format(`YYYY-MM-DD`) : false;
+    const pointDate = moment(array[index].dateStart).format(`YYYY-MM-DD`);
+    const nexPointDate = index !== array.length - 1 ? moment(array[index + 1].dateStart).format(`YYYY-MM-DD`) : false;
 
     if (nexPointDate !== pointDate) {
       render(boardComponent.getElement(), new TripDayComponent(point, TripDayCount).getElement(), RenderPosition.BEFOREEND);
@@ -105,7 +104,7 @@ if (tripPoints.length > 0) {
     const dayDate = day.querySelector(`.day__date`).getAttribute(`datetime`);
 
     tripPoints.filter((point) => {
-      const pointDate = moment(point.time.start).format(`YYYY-MM-DD`);
+      const pointDate = moment(point.dateStart).format(`YYYY-MM-DD`);
       if (pointDate === dayDate) {
         renderTripPoint(tripPointList, point);
       }

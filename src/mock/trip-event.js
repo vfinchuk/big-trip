@@ -1,6 +1,15 @@
-import {getRandomArrayItem, getRandomIntegerNumber} from '../utils';
-import {Services, Cities, EventTypes, Description} from '../const';
+import { getRandomArrayItem, getRandomIntegerNumber} from '../utils';
+import {Description, EventTypeEnum, LOCATIONS, MillisecondsEnum} from '../mock/consts';
 
+/**
+ * @param {EventType} types
+ * @return {EventType}
+ */
+const getRandomType = (types) => {
+  const values = Object.values(types);
+
+  return values[Math.floor(Math.random() * values.length)];
+};
 
 const generateDescription = (description) => {
   const sentences = description.split(`. `);
@@ -15,63 +24,92 @@ const generateDescription = (description) => {
 };
 
 
-const generateAdditionalServices = (options) => {
-  const result = new Set();
+/**
+ * @param {EventType} type
+ * @return {string}
+ */
+export const getEventPlaceholder = (type) => {
+  let placeholder = ``;
 
-  if (Math.random() >= 0.5) {
-    for (let i = 0; i <= getRandomIntegerNumber(0, 2); i++) {
-      result.add(getRandomArrayItem(options));
-    }
+  if (type.group === `activity`) {
+    placeholder = `in`;
+  } else if (type.group === `transfer`) {
+    placeholder = `to`;
   }
 
-  return result;
+  return placeholder;
 };
 
-export const generateEventPhotos = (count) => {
-  const photos = [];
+/**
+ * @param {Array} locations
+ * @param {string} eventType
+ * @return {string}
+ */
+const getRandomLocation = (locations, eventType) => {
+  locations = locations.filter((location) => location.eventTypes.has(eventType));
 
-  new Array(count)
-    .fill(``)
-    .forEach(() => {
-      photos.push(`http://picsum.photos/300/150?r=${Math.random()}`);
-    });
-
-  return photos;
+  return locations[Math.floor(Math.random() * locations.length)];
 };
 
-const generateSchedule = () => {
-  const startDate = new Date();
-  const sign = Math.random() > 0.5 ? 1 : -1;
-  const diffDayValue = getRandomIntegerNumber(1, 7);
-  const diffTimeValue = sign * getRandomIntegerNumber(0, 23);
-  const durationMinutes = getRandomIntegerNumber(30, 300);
-
-  startDate.setDate(startDate.getDate() + diffDayValue);
-  startDate.setHours(diffTimeValue);
-
-  const endDate = new Date(startDate);
-  endDate.setMinutes(startDate.getMinutes() + durationMinutes);
-
-  return {
-    start: startDate,
-    end: endDate,
-    duration: durationMinutes,
-  };
-};
-
+let lastPointDate = Date.now();
 
 const generateTripEvent = () => {
 
-  return {
-    type: getRandomArrayItem(EventTypes),
-    city: getRandomArrayItem(Cities),
-    photos: generateEventPhotos(getRandomIntegerNumber(2, 7)),
-    time: generateSchedule(),
-    price: getRandomIntegerNumber(10, 150),
-    extraServices: generateAdditionalServices(Services),
-    description: generateDescription(Description),
-  };
+  const dateStart = getRandomIntegerNumber(
+      lastPointDate,
+      lastPointDate + getRandomIntegerNumber(0, 3) * MillisecondsEnum.HOUR
+  );
 
+  const dateEnd = getRandomIntegerNumber(
+    dateStart + getRandomIntegerNumber(0, 3) * MillisecondsEnum.HOUR,
+    dateStart + getRandomIntegerNumber(3, 6) * MillisecondsEnum.HOUR,
+  );
+
+  lastPointDate = dateEnd;
+
+  const offers = new Map([
+    [
+      `luggage`, {
+        isChecked: Math.random() >= 0.5,
+        title: `Add luggage`,
+        price: 10
+      }
+    ],
+    [
+      `switch`, {
+        isChecked: Math.random() >= 0.5,
+        title: `Switch to comfort class`,
+        price: 10
+      }
+    ],
+    [
+      `meal`, {
+        isChecked: Math.random() >= 0.5,
+        title: `Add meal`,
+        price: 2
+      }
+    ],
+    [
+      `seats`, {
+        isChecked: Math.random() >= 0.5,
+        title: `Chose seats`,
+        price: 9
+      }
+    ],
+  ]);
+
+  const type = getRandomType(EventTypeEnum);
+
+  return {
+    location: getRandomLocation(LOCATIONS, type.code),
+    photos: new Array(5).fill(``).map(() => `http://picsum.photos/300/150?r=${Math.random()}`),
+    price: getRandomIntegerNumber(10, 150),
+    description: generateDescription(Description),
+    dateStart,
+    dateEnd,
+    offers,
+    type,
+  };
 };
 
 

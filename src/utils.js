@@ -1,3 +1,5 @@
+export const moment = require(`moment`);
+
 export const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`,
