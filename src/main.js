@@ -13,7 +13,7 @@ import TripDayComponent from './components/trip-day';
 import TripPointComponent from './components/trip-point';
 import NoPointsComponent from './components/no-points';
 
-const TRIP_POINT_COUNT = 20;
+const TRIP_POINT_COUNT = 1;
 
 /**
  * Rendering trip point element
@@ -56,12 +56,6 @@ const renderTripPoint = (dayItemElement, point) => {
 
 /* Sorting tripPoints data by start date */
 const tripPoints = getTripPoints(TRIP_POINT_COUNT);
-// tripPoints.sort((prev, it) => {
-//   const prevItemDate = new Date(prev.time.start);
-//   const itemDate = new Date(it.time.start);
-//
-//   return prevItemDate - itemDate;
-// });
 
 /* Header elements */
 const headerElement = document.querySelector(`.page-header`);
@@ -74,8 +68,8 @@ render(tripControlsElement.children[0], new SiteMenuComponent().getElement(), Re
 render(tripControlsElement.children[1], new FilterComponent().getElement(), RenderPosition.AFTEREND);
 
 /* Show total trip sum */
-// const totalAmountElement = headerElement.querySelector(`.trip-info__cost-value`);
-// totalAmountElement.textContent = getTripTotalAmount(tripPoints);
+const totalAmountElement = headerElement.querySelector(`.trip-info__cost-value`);
+totalAmountElement.textContent = getTripTotalAmount(tripPoints);
 
 const tripEventsElement = document.querySelector(`.trip-events`);
 if (tripPoints.length > 0) {

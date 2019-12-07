@@ -6,17 +6,6 @@ export const RenderPosition = {
   AFTEREND: `afterend`
 };
 
-export const convertMinutesToHours = (minutes) => {
-  if (minutes < 60) {
-    return `${minutes}M`;
-  } else if (minutes % 60 === 0) {
-    return `${minutes / 60 }H`;
-  } else {
-    return `${ Math.floor(minutes / 60) }H ${minutes % 60}M`;
-  }
-};
-
-
 export const getRandomIntegerNumber = (min, max) => {
   const rand = min + Math.random() * (max + 1 - min);
   return Math.floor(rand);
@@ -29,15 +18,15 @@ export const getRandomArrayItem = (array) => {
 };
 
 
-export const getTripTotalAmount = (points) => {
-  return points.reduce((sum, item) => {
-
-    sum += Array.from(item.extraServices).reduce((servicesSum, service) => {
-      servicesSum += service.price;
-      return servicesSum;
+export const getTotalAmount = (points) => {
+  return points.reduce((sum, point) => {
+    sum += Array.from(point.offers).reduce((offersSum, offer) => {
+      if (offer[1].isChecked) {
+        offersSum += offer[1].price;
+      }
+      return offersSum;
     }, 0);
-    sum += item.price;
-
+    sum += point.price;
     return sum;
   }, 0);
 };
