@@ -1,4 +1,4 @@
-import { getRandomArrayItem, getRandomIntegerNumber} from '../utils';
+import {getRandomArrayItem, getRandomIntegerNumber} from '../utils';
 import {Description, EventTypeEnum, LOCATIONS, MillisecondsEnum} from '../mock/consts';
 
 /**
@@ -53,11 +53,11 @@ const getRandomLocation = (locations, eventType) => {
 
 let lastPointDate = Date.now();
 
-const generateTripEvent = () => {
+const getTripPoint = () => {
 
   const dateStart = getRandomIntegerNumber(
-      lastPointDate,
-      lastPointDate + getRandomIntegerNumber(0, 3) * MillisecondsEnum.HOUR
+    lastPointDate,
+    lastPointDate + getRandomIntegerNumber(0, 3) * MillisecondsEnum.HOUR
   );
 
   const dateEnd = getRandomIntegerNumber(
@@ -70,31 +70,31 @@ const generateTripEvent = () => {
   const offers = new Map([
     [
       `luggage`, {
-        isChecked: Math.random() >= 0.5,
-        title: `Add luggage`,
-        price: 10
-      }
+      isChecked: Math.random() >= 0.5,
+      title: `Add luggage`,
+      price: 10
+    }
     ],
     [
       `switch`, {
-        isChecked: Math.random() >= 0.5,
-        title: `Switch to comfort class`,
-        price: 10
-      }
+      isChecked: Math.random() >= 0.5,
+      title: `Switch to comfort class`,
+      price: 10
+    }
     ],
     [
       `meal`, {
-        isChecked: Math.random() >= 0.5,
-        title: `Add meal`,
-        price: 2
-      }
+      isChecked: Math.random() >= 0.5,
+      title: `Add meal`,
+      price: 2
+    }
     ],
     [
       `seats`, {
-        isChecked: Math.random() >= 0.5,
-        title: `Chose seats`,
-        price: 9
-      }
+      isChecked: Math.random() >= 0.5,
+      title: `Chose seats`,
+      price: 9
+    }
     ],
   ]);
 
@@ -113,12 +113,31 @@ const generateTripEvent = () => {
 };
 
 
-const generateTripEvents = (count) => {
-
+const getTripPoints = (count) => {
   return new Array(count)
     .fill(``)
-    .map(generateTripEvent);
-
+    .map(getTripPoint);
 };
 
-export {generateTripEvent, generateTripEvents};
+const groupTripPointsByDay = (events) => {
+  let counter = 1;
+  return events.reduce((days, point) => {
+    let currentDay = new Date(point.dateStart).setHours(0, 0, 0, 0);
+
+    if (days.has(currentDay)) {
+      days.get(currentDay).points.push(point);
+    } else {
+      days.set(currentDay, {
+        date: point.dateStart,
+        counter,
+        points: [point],
+      });
+
+      counter++;
+    }
+
+    return days;
+  }, new Map());
+};
+
+export {getTripPoint, getTripPoints, groupTripPointsByDay};

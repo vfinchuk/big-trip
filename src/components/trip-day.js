@@ -1,19 +1,18 @@
 import {moment, createElement} from '../utils';
 import {MonthNames} from '../const';
 
-const createTripDayTemplate = (point, dayCount) => {
+const createTripDayTemplate = (dayDate, dayCount) => {
 
-  const date = moment(point.dateStart).format(`YYYY-MM-DD`);
-
-  const day = new Date(date).getDate();
-  const monthNumber = new Date(date).getMonth();
+  const dateTime = moment(dayDate).format(`YYYY-MM-DD`);
+  const day = new Date(dayDate).getDate();
+  const monthNumber = new Date(dayDate).getMonth();
   const month = MonthNames[monthNumber].slice(0, 3);
 
   return (
     `<li class="trip-days__item  day">
       <div class="day__info">
         <span class="day__counter">${dayCount}</span>
-        <time class="day__date" datetime="${date}">${month} ${day}</time>
+        <time class="day__date" datetime="${dateTime}">${month} ${day}</time>
       </div>
 
       <ul class="trip-events__list"></ul>

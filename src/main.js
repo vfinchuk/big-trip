@@ -1,6 +1,6 @@
 /* Import utils and constants */
-import {moment, getTripTotalAmount, render, RenderPosition} from './utils';
-import {generateTripEvents} from './mock/trip-event';
+import {getTripTotalAmount, render, RenderPosition} from './utils';
+import {getTripPoints, groupTripPointsByDay} from './mock/trip-event';
 
 /* Import app components */
 import SiteMenuComponent from './components/site-menu';
@@ -13,7 +13,7 @@ import TripDayComponent from './components/trip-day';
 import TripPointComponent from './components/trip-point';
 import NoPointsComponent from './components/no-points';
 
-const TRIP_EVENT_COUNT = 10;
+const TRIP_POINT_COUNT = 20;
 
 /**
  * Rendering trip point element
@@ -55,7 +55,7 @@ const renderTripPoint = (dayItemElement, point) => {
 };
 
 /* Sorting tripPoints data by start date */
-const tripPoints = generateTripEvents(TRIP_EVENT_COUNT);
+const tripPoints = getTripPoints(TRIP_POINT_COUNT);
 // tripPoints.sort((prev, it) => {
 //   const prevItemDate = new Date(prev.time.start);
 //   const itemDate = new Date(it.time.start);
@@ -86,28 +86,17 @@ if (tripPoints.length > 0) {
   render(tripEventsElement, boardComponent.getElement(), RenderPosition.BEFOREEND);
 
   /* Rendering trip day elements */
-  let TripDayCount = 1;
-  tripPoints.forEach((point, index, array) => {
-    const pointDate = moment(array[index].dateStart).format(`YYYY-MM-DD`);
-    const nexPointDate = index !== array.length - 1 ? moment(array[index + 1].dateStart).format(`YYYY-MM-DD`) : false;
+  const tripPointsByDay = groupTripPointsByDay(tripPoints);
 
-    if (nexPointDate !== pointDate) {
-      render(boardComponent.getElement(), new TripDayComponent(point, TripDayCount).getElement(), RenderPosition.BEFOREEND);
-      TripDayCount++;
-    }
-  });
+  [...tripPointsByDay].map((day, index) => {
+    render(boardComponent.getElement(), new TripDayComponent(day[1].date, day[1].counter).getElement(), RenderPosition.BEFOREEND);
 
-  /* Rendering trip point elements */
-  const tripDays = boardComponent.getElement().querySelectorAll(`.trip-days__item`);
-  tripDays.forEach((day) => {
-    const tripPointList = day.querySelector(`.trip-events__list`);
-    const dayDate = day.querySelector(`.day__date`).getAttribute(`datetime`);
+    const tripDayItemPointList = boardComponent.getElement()
+      .querySelectorAll(`.trip-days__item`)[index]
+      .querySelector(`.trip-events__list`);
 
-    tripPoints.filter((point) => {
-      const pointDate = moment(point.dateStart).format(`YYYY-MM-DD`);
-      if (pointDate === dayDate) {
-        renderTripPoint(tripPointList, point);
-      }
+    day[1].points.map((point) => {
+      renderTripPoint(tripDayItemPointList, point);
     });
   });
 
@@ -116,5 +105,3 @@ if (tripPoints.length > 0) {
   /* Rendering no trip points massage */
   render(tripEventsElement, new NoPointsComponent().getElement(), RenderPosition.BEFOREEND);
 }
-
-
