@@ -1,5 +1,5 @@
 /* Import utils and constants */
-import {getTripTotalAmount, render, RenderPosition} from './utils';
+import {getTotalAmount, render, RenderPosition} from './utils';
 import {getTripPoints, groupTripPointsByDay} from './mock/trip-event';
 
 /* Import app components */
@@ -13,7 +13,7 @@ import TripDayComponent from './components/trip-day';
 import TripPointComponent from './components/trip-point';
 import NoPointsComponent from './components/no-points';
 
-const TRIP_POINT_COUNT = 1;
+const TRIP_POINT_COUNT = 10;
 
 /**
  * Rendering trip point element
@@ -69,7 +69,7 @@ render(tripControlsElement.children[1], new FilterComponent().getElement(), Rend
 
 /* Show total trip sum */
 const totalAmountElement = headerElement.querySelector(`.trip-info__cost-value`);
-totalAmountElement.textContent = getTripTotalAmount(tripPoints);
+totalAmountElement.textContent = getTotalAmount(tripPoints);
 
 const tripEventsElement = document.querySelector(`.trip-events`);
 if (tripPoints.length > 0) {
