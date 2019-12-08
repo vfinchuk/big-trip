@@ -9,8 +9,7 @@ export const RenderPosition = {
 };
 
 /**
- *
- * @param template {string}
+ * @param {string} template
  * @return {Node}
  */
 export const createElement = (template) => {
@@ -22,9 +21,9 @@ export const createElement = (template) => {
 
 /**
  *
- * @param  container {node}
- * @param component {object}
- * @param place {string}
+ * @param {HTMLElement} container
+ * @param {object} component
+ * @param {string} place
  */
 export const render = (container, component, place) => {
   switch (place) {

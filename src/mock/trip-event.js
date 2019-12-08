@@ -1,4 +1,4 @@
-import {getRandomArrayItem, getRandomIntegerNumber} from '../utils';
+import {getRandomArrayItem, getRandomIntegerNumber} from '../utils/common';
 import {Description, EventTypeEnum, LOCATIONS, MillisecondsEnum} from '../mock/consts';
 
 /**
@@ -136,7 +136,7 @@ export const getTripPoints = (count) => {
 };
 
 /**
- * 
+ *
  * @param events
  * @return {*}
  */

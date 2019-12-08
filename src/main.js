@@ -1,6 +1,6 @@
 /* Import utils and constants */
 import {RenderPosition, render, replace} from './utils/render';
-import {getTotalAmount} from './utils';
+import {getTotalAmount} from './utils/common';
 import {getTripPoints, groupTripPointsByDay} from './mock/trip-event';
 
 /* Import app components */
