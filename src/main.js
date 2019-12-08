@@ -21,7 +21,7 @@ const tripInfoElement = headerElement.querySelector(`.trip-info`);
 const tripControlsElement = headerElement.querySelector(`.trip-controls`);
 
 /* Render header elements */
-render(tripInfoElement, new TripInfoComponent(), RenderPosition.AFTERBEGIN);
+render(tripInfoElement, new TripInfoComponent(tripPoints), RenderPosition.AFTERBEGIN);
 render(tripControlsElement.children[0], new SiteMenuComponent(), RenderPosition.AFTEREND);
 render(tripControlsElement.children[1], new FilterComponent(), RenderPosition.AFTEREND);
 
