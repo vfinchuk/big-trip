@@ -18,7 +18,7 @@ const TRIP_POINT_COUNT = 20;
 
 /**
  * Rendering trip point element
- * @param {Node} dayItemElement
+ * @param {HTMLElement} dayItemElement
  * @param {object} point
  */
 const renderTripPoint = (dayItemElement, point) => {
@@ -42,8 +42,7 @@ const renderTripPoint = (dayItemElement, point) => {
   const tripPoint = new TripPointComponent(point);
   const editTripPoint = new TripPointEditComponent(point);
 
-  const editButton = tripPoint.getElement().querySelector(`.event__rollup-btn`);
-  editButton.addEventListener(`click`, () => {
+  tripPoint.onEditButtonClick(() => {
     replacePointToEdit();
     document.addEventListener(`keydown`, onEscapeKeyDown);
   });
