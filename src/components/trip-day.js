@@ -29,15 +29,15 @@ const createTripDayTemplate = (date, dayCount) => {
 
 
 export default class TripDay extends AbstractComponent {
-  constructor(point, dayCount) {
+  constructor(date, dayCount) {
     super();
 
     this._dayCount = dayCount;
-    this._point = point;
+    this._date = date;
   }
 
   getTemplate() {
-    return createTripDayTemplate(this._point, this._dayCount);
+    return createTripDayTemplate(this._date, this._dayCount);
   }
 
 }
