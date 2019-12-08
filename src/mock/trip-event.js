@@ -3,7 +3,7 @@ import {Description, EventTypeEnum, LOCATIONS, MillisecondsEnum} from '../mock/c
 
 /**
  *
- * @param types
+ * @param {object} types
  * @return {*}
  */
 const getRandomType = (types) => {
@@ -14,7 +14,7 @@ const getRandomType = (types) => {
 
 /**
  *
- * @param description
+ * @param {string} description
  * @return {string}
  */
 const generateDescription = (description) => {
@@ -32,7 +32,7 @@ const generateDescription = (description) => {
 
 /**
  *
- * @param type
+ * @param {object} type
  * @return {string}
  */
 export const getEventPlaceholder = (type) => {
@@ -49,8 +49,8 @@ export const getEventPlaceholder = (type) => {
 
 /**
  *
- * @param locations
- * @param eventType
+ * @param {array} locations
+ * @param {object} eventType
  * @return {*}
  */
 const getRandomLocation = (locations, eventType) => {
@@ -68,13 +68,13 @@ let lastPointDate = Date.now();
 export const getTripPoint = () => {
 
   const dateStart = getRandomIntegerNumber(
-    lastPointDate,
-    lastPointDate + getRandomIntegerNumber(0, 3) * MillisecondsEnum.HOUR
+      lastPointDate,
+      lastPointDate + getRandomIntegerNumber(0, 3) * MillisecondsEnum.HOUR
   );
 
   const dateEnd = getRandomIntegerNumber(
-    dateStart + getRandomIntegerNumber(0, 3) * MillisecondsEnum.HOUR,
-    dateStart + getRandomIntegerNumber(3, 6) * MillisecondsEnum.HOUR,
+      dateStart + getRandomIntegerNumber(0, 3) * MillisecondsEnum.HOUR,
+      dateStart + getRandomIntegerNumber(3, 6) * MillisecondsEnum.HOUR
   );
 
   lastPointDate = dateEnd;
@@ -82,31 +82,31 @@ export const getTripPoint = () => {
   const offers = new Map([
     [
       `luggage`, {
-      isChecked: Math.random() >= 0.5,
-      title: `Add luggage`,
-      price: 10
-    }
+        isChecked: Math.random() >= 0.5,
+        title: `Add luggage`,
+        price: 10
+      }
     ],
     [
       `switch`, {
-      isChecked: Math.random() >= 0.5,
-      title: `Switch to comfort class`,
-      price: 10
-    }
+        isChecked: Math.random() >= 0.5,
+        title: `Switch to comfort class`,
+        price: 10
+      }
     ],
     [
       `meal`, {
-      isChecked: Math.random() >= 0.5,
-      title: `Add meal`,
-      price: 2
-    }
+        isChecked: Math.random() >= 0.5,
+        title: `Add meal`,
+        price: 2
+      }
     ],
     [
       `seats`, {
-      isChecked: Math.random() >= 0.5,
-      title: `Chose seats`,
-      price: 9
-    }
+        isChecked: Math.random() >= 0.5,
+        title: `Chose seats`,
+        price: 9
+      }
     ],
   ]);
 
@@ -126,7 +126,7 @@ export const getTripPoint = () => {
 
 /**
  *
- * @param count
+ * @param {int} count
  * @return {Array}
  */
 export const getTripPoints = (count) => {
@@ -137,7 +137,7 @@ export const getTripPoints = (count) => {
 
 /**
  *
- * @param events
+ * @param {array} events
  * @return {*}
  */
 export const groupTripPointsByDay = (events) => {
