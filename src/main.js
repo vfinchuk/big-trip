@@ -42,13 +42,12 @@ const renderTripPoint = (dayItemElement, point) => {
   const tripPoint = new TripPointComponent(point);
   const editTripPoint = new TripPointEditComponent(point);
 
-  tripPoint.onEditButtonClick(() => {
+  tripPoint.setEditButtonClickHandler(() => {
     replacePointToEdit();
     document.addEventListener(`keydown`, onEscapeKeyDown);
   });
 
-  const editForm = editTripPoint.getElement();
-  editForm.addEventListener(`submit`, () => replaceEditToPoint);
+  editTripPoint.setSubmitHandler(replaceEditToPoint);
 
   render(dayItemElement, tripPoint, RenderPosition.BEFOREEND);
 };
