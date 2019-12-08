@@ -31,19 +31,24 @@ const generateOffersMarkup = (offers) => {
  */
 const getDurationTimeFormat = (dateStart, dateEnd) => {
   const durationTime = moment.duration(
-    moment(dateEnd).diff(moment(dateStart))
+      moment(dateEnd).diff(moment(dateStart))
   );
 
+  const days = durationTime.days();
   const hours = durationTime.hours();
   const minutes = durationTime.minutes();
+
+  const daysFormat = days >= 10 ? days : `0${days}`;
   const minutesFormant = minutes >= 10 ? minutes : `0${minutes}`;
 
-  if (hours === 0) {
-    return `${minutesFormant}M`;
-  } else if (minutes === 0) {
+  if (minutes === 0) {
     return `${hours}H`;
-  } else {
+  } else if (hours === 0) {
+    return `${minutesFormant}M`;
+  } else if (days === 0) {
     return `${hours}H ${minutesFormant}M`;
+  } else {
+    return `${daysFormat}D ${hours}H ${minutesFormant}M`;
   }
 
 };
