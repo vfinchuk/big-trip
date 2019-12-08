@@ -1,4 +1,5 @@
-import {createElement, moment} from '../utils';
+import AbstractComponent from './abstract-component';
+import {moment} from '../utils';
 import {getEventPlaceholder} from '../mock/trip-event';
 
 /**
@@ -97,26 +98,15 @@ const createTripPointTemplate = (point) => {
 };
 
 
-export default class TripPoint {
+export default class TripPoint extends AbstractComponent {
   constructor(point) {
-    this._point = point;
+    super();
 
-    this._element = null;
+    this._point = point;
   }
 
   getTemplate() {
     return createTripPointTemplate(this._point);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
 }

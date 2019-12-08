@@ -1,4 +1,4 @@
-import {createElement} from '../utils';
+import AbstractComponent from './abstract-component';
 
 /**
  *
@@ -6,24 +6,10 @@ import {createElement} from '../utils';
  */
 const createBoardTemplate = () => `<ul class="trip-days"></ul>`;
 
-export default class Board {
-  constructor() {
-    this._element = null;
-  }
+
+export default class Board extends AbstractComponent {
 
   getTemplate() {
-    return createBoardTemplate(this._filters);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+    return createBoardTemplate();
   }
 }

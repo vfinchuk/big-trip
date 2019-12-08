@@ -1,4 +1,4 @@
-import {createElement} from '../utils';
+import AbstractComponent from './abstract-component';
 import {getFilters} from '../mock/filters';
 
 /**
@@ -26,21 +26,11 @@ const createFilterTemplate = () => {
 
 };
 
-export default class Filter {
+
+export default class Filter extends AbstractComponent {
 
   getTemplate() {
     return createFilterTemplate();
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
 }

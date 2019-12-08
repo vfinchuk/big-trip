@@ -1,4 +1,5 @@
-import {moment, createElement} from '../utils';
+import AbstractComponent from './abstract-component';
+import {moment} from '../utils';
 import {MonthNamesEnum} from '../const';
 
 /**
@@ -27,27 +28,16 @@ const createTripDayTemplate = (date, dayCount) => {
 };
 
 
-export default class TripDay {
+export default class TripDay extends AbstractComponent {
   constructor(point, dayCount) {
+    super();
+
     this._dayCount = dayCount;
     this._point = point;
-
-    this._element = null;
   }
 
   getTemplate() {
     return createTripDayTemplate(this._point, this._dayCount);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
 }
