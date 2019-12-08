@@ -20,6 +20,7 @@ const generateOffersMarkup = (offers) => {
          </li>`
       );
     })
+    .slice(0, 3)
     .join(`\n`);
 };
 
@@ -68,6 +69,8 @@ const createTripPointTemplate = (point) => {
   const startDate = moment(dateStart).format(`YYYY-MM-DD`);
   const endDate = moment(dateEnd).format(`YYYY-MM-DD`);
 
+  const offersList = generateOffersMarkup(offers, 3);
+
   return (
     `<li class="trip-events__item">
       <div class="event">
@@ -91,7 +94,7 @@ const createTripPointTemplate = (point) => {
 
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
-          ${generateOffersMarkup(offers)}
+          ${offersList}
         </ul>
 
         <button class="event__rollup-btn" type="button">
