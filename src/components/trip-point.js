@@ -109,7 +109,7 @@ export default class TripPoint extends AbstractComponent {
     return createTripPointTemplate(this._point);
   }
 
-  onEditButtonClick(handler) {
+  setEditButtonClickHandler(handler) {
     this.getElement().querySelector(`.event__rollup-btn`)
       .addEventListener(`click`, handler);
   }
