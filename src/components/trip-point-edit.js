@@ -195,4 +195,8 @@ export default class TripPointEdit extends AbstractComponent {
     return createTripPointEditTemplate(this._point);
   }
 
+  setSubmitHandler(handler) {
+    this.getElement().addEventListener(`submit`, handler);
+  }
+
 }
