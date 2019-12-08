@@ -1,6 +1,10 @@
 import {createElement} from '../utils';
 import {getFilters} from '../mock/filters';
 
+/**
+ *
+ * @return {string}
+ */
 const createFilterTemplate = () => {
 
   const filterItems = getFilters()

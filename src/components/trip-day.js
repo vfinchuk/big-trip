@@ -1,12 +1,18 @@
 import {moment, createElement} from '../utils';
-import {MonthNames} from '../const';
+import {MonthNamesEnum} from '../const';
 
-const createTripDayTemplate = (dayDate, dayCount) => {
+/**
+ *
+ * @param {int} date - timestamp
+ * @param {int} dayCount - ordinal day number
+ * @return {string}
+ */
+const createTripDayTemplate = (date, dayCount) => {
 
-  const dateTime = moment(dayDate).format(`YYYY-MM-DD`);
-  const day = new Date(dayDate).getDate();
-  const monthNumber = new Date(dayDate).getMonth();
-  const month = MonthNames[monthNumber].slice(0, 3);
+  const dateTime = moment(date).format(`YYYY-MM-DD`);
+  const day = new Date(date).getDate();
+  const monthNumber = new Date(date).getMonth();
+  const month = MonthNamesEnum[monthNumber].slice(0, 3);
 
   return (
     `<li class="trip-days__item  day">

@@ -1,6 +1,10 @@
 import {createElement} from '../utils';
 import {getMenu} from '../mock/site-menu';
 
+/**
+ *
+ * @return {string}
+ */
 const createSiteMenuTemplate = () => {
   const menuItems = getMenu().map((item) => {
     return `<a class="trip-tabs__btn  ${item.isChecked ? `trip-tabs__btn--active` : `` }" href="#">${item.title}</a>`;

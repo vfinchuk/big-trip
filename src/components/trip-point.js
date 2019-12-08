@@ -1,6 +1,11 @@
 import {createElement, moment} from '../utils';
 import {getEventPlaceholder} from '../mock/trip-event';
 
+/**
+ *
+ * @param {array} offers
+ * @return {string}
+ */
 const generateOffersMarkup = (offers) => {
   return Array.from(offers)
     .filter((offer) => offer[1].isChecked === true)
@@ -17,9 +22,15 @@ const generateOffersMarkup = (offers) => {
     .join(`\n`);
 };
 
+/**
+ * Return duration time in format: 4H 30M
+ * @param {int} dateStart timestamp
+ * @param {int} dateEnd timestamp
+ * @return {string}
+ */
 const getDurationTimeFormat = (dateStart, dateEnd) => {
   const durationTime = moment.duration(
-      moment(dateEnd).diff(moment(dateStart))
+    moment(dateEnd).diff(moment(dateStart))
   );
 
   const hours = durationTime.hours();
@@ -36,6 +47,11 @@ const getDurationTimeFormat = (dateStart, dateEnd) => {
 
 };
 
+/**
+ *
+ * @param {object} point
+ * @return {string}
+ */
 const createTripPointTemplate = (point) => {
 
   const {type, location, price, dateStart, dateEnd, offers} = point;

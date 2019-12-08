@@ -2,8 +2,14 @@ import {EventTypeEnum, LOCATIONS} from '../mock/consts';
 import {createElement, moment} from '../utils';
 import {getEventPlaceholder} from '../mock/trip-event';
 
+/**
+ *
+ * @param {object} types
+ * @param {object} currentType
+ * @param {string} typeGroup - filtered types by pointed group [transfer, activity]
+ * @return {string|*}
+ */
 const createEventTypeMarkup = (types, currentType, typeGroup) => {
-
   return Object.values(types)
     .filter((type) => type.group === typeGroup)
     .map((type, index) => {
@@ -20,10 +26,14 @@ const createEventTypeMarkup = (types, currentType, typeGroup) => {
        </div>`
       );
     }).join(`\n`);
-
-
 };
 
+/**
+ *
+ * @param {array} locations - all available locations
+ * @param {object} currentLocation
+ * @return {string|*}
+ */
 const createDestinationMarkup = (locations, currentLocation) => {
   return locations.map((location) => {
     return (
@@ -32,10 +42,14 @@ const createDestinationMarkup = (locations, currentLocation) => {
         ${currentLocation.name === location.name ? `checked` : ``}
         ></option>`
     );
-  })
-    .join(`\n`);
+  }).join(`\n`);
 };
 
+/**
+ *
+ * @param {map} offers
+ * @return {string}
+ */
 const createOffersMarkup = (offers) => {
   return [...offers.values()].map((offer, index) => {
     return `<div class="event__offer-selector">
@@ -51,16 +65,24 @@ const createOffersMarkup = (offers) => {
   }).join(``);
 };
 
+/**
+ *
+ * @param {array} photos
+ * @return {string|*}
+ */
 const createPhotosMarkup = (photos) => {
   return photos.map((photo) => {
     return (
       `<img class="event__photo" src="${photo}" alt="Event photo">`
     );
-  })
-    .join(`\n`);
+  }).join(`\n`);
 };
 
-
+/**
+ *
+ * @param {object} point
+ * @return {string}
+ */
 const createTripPointEditTemplate = (point) => {
   const {type, location, price, photos, dateStart, dateEnd, offers, description} = point;
 
@@ -74,8 +96,8 @@ const createTripPointEditTemplate = (point) => {
   const startTime = moment(dateStart).format(`HH:mm`);
   const endTime = moment(dateEnd).format(`HH:mm`);
 
-  const startDate = moment(dateStart).format(`YYYY-MM-DD`);
-  const endDate = moment(dateEnd).format(`YYYY-MM-DD`);
+  const startDate = moment(dateStart).format(`YYYY/MM/DD`);
+  const endDate = moment(dateEnd).format(`YYYY/MM/DD`);
 
   const images = createPhotosMarkup(photos);
 

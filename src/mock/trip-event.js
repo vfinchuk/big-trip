@@ -2,8 +2,9 @@ import {getRandomArrayItem, getRandomIntegerNumber} from '../utils';
 import {Description, EventTypeEnum, LOCATIONS, MillisecondsEnum} from '../mock/consts';
 
 /**
- * @param {EventType} types
- * @return {EventType}
+ *
+ * @param types
+ * @return {*}
  */
 const getRandomType = (types) => {
   const values = Object.values(types);
@@ -11,6 +12,11 @@ const getRandomType = (types) => {
   return values[Math.floor(Math.random() * values.length)];
 };
 
+/**
+ *
+ * @param description
+ * @return {string}
+ */
 const generateDescription = (description) => {
   const sentences = description.split(`. `);
 
@@ -25,7 +31,8 @@ const generateDescription = (description) => {
 
 
 /**
- * @param {EventType} type
+ *
+ * @param type
  * @return {string}
  */
 export const getEventPlaceholder = (type) => {
@@ -41,9 +48,10 @@ export const getEventPlaceholder = (type) => {
 };
 
 /**
- * @param {Array} locations
- * @param {string} eventType
- * @return {string}
+ *
+ * @param locations
+ * @param eventType
+ * @return {*}
  */
 const getRandomLocation = (locations, eventType) => {
   locations = locations.filter((location) => location.eventTypes.has(eventType));
@@ -53,6 +61,10 @@ const getRandomLocation = (locations, eventType) => {
 
 let lastPointDate = Date.now();
 
+/**
+ *
+ * @return {{location: *, photos: Array, price: number, description: string, dateStart: number, dateEnd: number, offers: Map, type: *}}
+ */
 export const getTripPoint = () => {
 
   const dateStart = getRandomIntegerNumber(
@@ -112,13 +124,22 @@ export const getTripPoint = () => {
   };
 };
 
-
+/**
+ *
+ * @param count
+ * @return {Array}
+ */
 export const getTripPoints = (count) => {
   return new Array(count)
     .fill(``)
     .map(getTripPoint);
 };
 
+/**
+ * 
+ * @param events
+ * @return {*}
+ */
 export const groupTripPointsByDay = (events) => {
   let counter = 1;
   return events.reduce((days, point) => {

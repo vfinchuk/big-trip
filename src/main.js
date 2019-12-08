@@ -13,7 +13,7 @@ import TripDayComponent from './components/trip-day';
 import TripPointComponent from './components/trip-point';
 import NoPointsComponent from './components/no-points';
 
-const TRIP_POINT_COUNT = 10;
+const TRIP_POINT_COUNT = 20;
 
 /**
  * Rendering trip point element

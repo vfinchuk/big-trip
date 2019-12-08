@@ -1,5 +1,9 @@
 import {createElement} from '../utils';
 
+/**
+ *
+ * @return {string}
+ */
 const createBoardTemplate = () => `<ul class="trip-days"></ul>`;
 
 export default class Board {
