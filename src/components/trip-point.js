@@ -60,14 +60,15 @@ const getDurationTimeFormat = (dateStart, dateEnd) => {
  * @return {string}
  */
 const createTripPointTemplate = (point) => {
-
+  const timeFormat = `HH:mm`;
+  const dateFormat = `YYYY-MM-DD`;
   const {type, location, price, dateStart, dateEnd, offers} = point;
 
-  const startTime = moment(dateStart).format(`HH:mm`);
-  const endTime = moment(dateEnd).format(`HH:mm`);
+  const startTime = moment(dateStart).format(timeFormat);
+  const endTime = moment(dateEnd).format(timeFormat);
 
-  const startDate = moment(dateStart).format(`YYYY-MM-DD`);
-  const endDate = moment(dateEnd).format(`YYYY-MM-DD`);
+  const startDate = moment(dateStart).format(dateFormat);
+  const endDate = moment(dateEnd).format(dateFormat);
 
   const offersList = generateOffersMarkup(offers);
 
