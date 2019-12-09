@@ -12,7 +12,7 @@ export const getRandomIntegerNumber = (min, max) => {
 };
 /**
  *
- * @param {array} array
+ * @param {Array} array
  * @return {*}
  */
 export const getRandomArrayItem = (array) => {
@@ -20,6 +20,3 @@ export const getRandomArrayItem = (array) => {
 
   return array[randomArrayIndex];
 };
-
-
-
