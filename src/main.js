@@ -27,10 +27,6 @@ render(tripInfoElement, new TripInfoComponent(tripPoints), RenderPosition.AFTERB
 render(tripControlsElement.children[0], new SiteMenuComponent(), RenderPosition.AFTEREND);
 render(tripControlsElement.children[1], new FilterComponent(getFilters()), RenderPosition.AFTEREND);
 
-/* Show total trip sum */
-const totalAmountElement = headerElement.querySelector(`.trip-info__cost-value`);
-totalAmountElement.textContent = getTotalAmount(tripPoints);
-
 const tripEventsElement = document.querySelector(`.trip-events`);
 
 const tripController = new TripController(tripEventsElement);
