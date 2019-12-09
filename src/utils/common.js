@@ -21,22 +21,5 @@ export const getRandomArrayItem = (array) => {
   return array[randomArrayIndex];
 };
 
-/**
- *
- * @param {array} points
- * @return {int}
- */
-export const getTotalAmount = (points) => {
-  return points.reduce((sum, point) => {
-    sum += Array.from(point.offers).reduce((offersSum, offer) => {
-      if (offer[1].isChecked) {
-        offersSum += offer[1].price;
-      }
-      return offersSum;
-    }, 0);
-    sum += point.price;
-    return sum;
-  }, 0);
-};
 
 
