@@ -1,43 +1,27 @@
-import {createElement} from '../utils';
+import AbstractComponent from './abstract-component';
+import {getMenu} from '../mock/site-menu';
 
-const createSiteMenuMarkup = (menuItem, isActive) => {
-  const activeClass = isActive ? `trip-tabs__btn--active` : ``;
-  return (
-    `<a class="trip-tabs__btn  ${activeClass}" href="#">${menuItem}</a>`
-  );
-};
-
-const createSiteMenuTemplate = (menuItems) => {
-
-  const mainMenuItemsMarkup = menuItems.map((it, i) => createSiteMenuMarkup(it, i === 0)).join(`\n`);
+/**
+ *
+ * @return {string}
+ */
+const createSiteMenuTemplate = () => {
+  const menuItems = getMenu().map((item) => {
+    return `<a class="trip-tabs__btn  ${item.isChecked ? `trip-tabs__btn--active` : `` }" href="#">${item.title}</a>`;
+  }).join(`\n`);
 
   return (
     `<nav class="trip-controls__trip-tabs  trip-tabs">
-      ${mainMenuItemsMarkup}
+      ${menuItems}
      </nav>`
   );
 };
 
-export default class SiteMenu {
-  constructor(menuItems) {
-    this._menuItems = menuItems;
 
-    this._element = null;
-  }
+export default class SiteMenu extends AbstractComponent {
 
   getTemplate() {
-    return createSiteMenuTemplate(this._menuItems);
+    return createSiteMenuTemplate();
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
 }

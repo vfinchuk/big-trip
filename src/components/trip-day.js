@@ -1,19 +1,25 @@
-import {createElement} from '../utils';
-import {moment, MonthNames} from '../const';
+import AbstractComponent from './abstract-component';
+import {moment} from '../utils/common';
+import {MonthNamesEnum} from '../const';
 
-const createTripDayTemplate = (point, dayCount) => {
+/**
+ *
+ * @param {int} date - timestamp
+ * @param {int} dayCount - ordinal day number
+ * @return {string}
+ */
+const createTripDayTemplate = (date, dayCount) => {
 
-  const date = moment(point.time.start).format(`YYYY-MM-DD`);
-
+  const dateTime = moment(date).format(`YYYY-MM-DD`);
   const day = new Date(date).getDate();
   const monthNumber = new Date(date).getMonth();
-  const month = MonthNames[monthNumber].slice(0, 3);
+  const month = MonthNamesEnum[monthNumber].slice(0, 3);
 
   return (
     `<li class="trip-days__item  day">
       <div class="day__info">
         <span class="day__counter">${dayCount}</span>
-        <time class="day__date" datetime="${date}">${month} ${day}</time>
+        <time class="day__date" datetime="${dateTime}">${month} ${day}</time>
       </div>
 
       <ul class="trip-events__list"></ul>
@@ -22,27 +28,16 @@ const createTripDayTemplate = (point, dayCount) => {
 };
 
 
-export default class TripDay {
-  constructor(point, dayCount) {
-    this._dayCount = dayCount;
-    this._point = point;
+export default class TripDay extends AbstractComponent {
+  constructor(date, dayCount) {
+    super();
 
-    this._element = null;
+    this._dayCount = dayCount;
+    this._date = date;
   }
 
   getTemplate() {
-    return createTripDayTemplate(this._point, this._dayCount);
+    return createTripDayTemplate(this._date, this._dayCount);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
 }

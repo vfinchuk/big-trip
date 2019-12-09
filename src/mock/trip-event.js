@@ -1,7 +1,22 @@
-import {getRandomArrayItem, getRandomIntegerNumber} from '../utils';
-import {Services, Cities, EventTypes, Description} from '../const';
+import {getRandomArrayItem, getRandomIntegerNumber} from '../utils/common';
+import {Description, EventTypeEnum, LOCATIONS, MillisecondsEnum} from '../mock/consts';
 
+/**
+ *
+ * @param {object} types
+ * @return {*}
+ */
+const getRandomType = (types) => {
+  const values = Object.values(types);
 
+  return values[Math.floor(Math.random() * values.length)];
+};
+
+/**
+ *
+ * @param {string} description
+ * @return {string}
+ */
 const generateDescription = (description) => {
   const sentences = description.split(`. `);
 
@@ -15,72 +30,133 @@ const generateDescription = (description) => {
 };
 
 
-const generateAdditionalServices = (options) => {
-  const result = new Set();
+/**
+ *
+ * @param {object} type
+ * @return {string}
+ */
+export const getEventPlaceholder = (type) => {
+  let placeholder = ``;
 
-  if (Math.random() >= 0.5) {
-    for (let i = 0; i <= getRandomIntegerNumber(0, 2); i++) {
-      result.add(getRandomArrayItem(options));
-    }
+  if (type.group === `activity`) {
+    placeholder = `in`;
+  } else if (type.group === `transfer`) {
+    placeholder = `to`;
   }
 
-  return result;
+  return placeholder;
 };
 
-export const generateEventPhotos = (count) => {
-  const photos = [];
+/**
+ *
+ * @param {array} locations
+ * @param {object} eventType
+ * @return {*}
+ */
+const getRandomLocation = (locations, eventType) => {
+  locations = locations.filter((location) => location.eventTypes.has(eventType));
 
-  new Array(count)
-    .fill(``)
-    .forEach(() => {
-      photos.push(`http://picsum.photos/300/150?r=${Math.random()}`);
-    });
-
-  return photos;
+  return locations[Math.floor(Math.random() * locations.length)];
 };
 
-const generateSchedule = () => {
-  const startDate = new Date();
-  const sign = Math.random() > 0.5 ? 1 : -1;
-  const diffDayValue = getRandomIntegerNumber(1, 7);
-  const diffTimeValue = sign * getRandomIntegerNumber(0, 23);
-  const durationMinutes = getRandomIntegerNumber(30, 300);
+let lastPointDate = Date.now();
 
-  startDate.setDate(startDate.getDate() + diffDayValue);
-  startDate.setHours(diffTimeValue);
+/**
+ *
+ * @return {{location: *, photos: Array, price: number, description: string, dateStart: number, dateEnd: number, offers: Map, type: *}}
+ */
+export const getTripPoint = () => {
 
-  const endDate = new Date(startDate);
-  endDate.setMinutes(startDate.getMinutes() + durationMinutes);
+  const dateStart = getRandomIntegerNumber(
+      lastPointDate,
+      lastPointDate + getRandomIntegerNumber(0, 3) * MillisecondsEnum.HOUR
+  );
+
+  const dateEnd = getRandomIntegerNumber(
+      dateStart + getRandomIntegerNumber(0, 3) * MillisecondsEnum.HOUR,
+      dateStart + getRandomIntegerNumber(3, 6) * MillisecondsEnum.HOUR
+  );
+
+  lastPointDate = dateEnd;
+
+  const offers = new Map([
+    [
+      `luggage`, {
+        isChecked: Math.random() >= 0.5,
+        title: `Add luggage`,
+        price: 10
+      }
+    ],
+    [
+      `switch`, {
+        isChecked: Math.random() >= 0.5,
+        title: `Switch to comfort class`,
+        price: 10
+      }
+    ],
+    [
+      `meal`, {
+        isChecked: Math.random() >= 0.5,
+        title: `Add meal`,
+        price: 2
+      }
+    ],
+    [
+      `seats`, {
+        isChecked: Math.random() >= 0.5,
+        title: `Chose seats`,
+        price: 9
+      }
+    ],
+  ]);
+
+  const type = getRandomType(EventTypeEnum);
 
   return {
-    start: startDate,
-    end: endDate,
-    duration: durationMinutes,
-  };
-};
-
-
-const generateTripEvent = () => {
-
-  return {
-    type: getRandomArrayItem(EventTypes),
-    city: getRandomArrayItem(Cities),
-    photos: generateEventPhotos(getRandomIntegerNumber(2, 7)),
-    time: generateSchedule(),
+    location: getRandomLocation(LOCATIONS, type.code),
+    photos: new Array(5).fill(``).map(() => `http://picsum.photos/300/150?r=${Math.random()}`),
     price: getRandomIntegerNumber(10, 150),
-    extraServices: generateAdditionalServices(Services),
     description: generateDescription(Description),
+    dateStart,
+    dateEnd,
+    offers,
+    type,
   };
-
 };
 
-
-const generateTripEvents = (count) => {
-
+/**
+ *
+ * @param {int} count
+ * @return {Array}
+ */
+export const getTripPoints = (count) => {
   return new Array(count)
     .fill(``)
-    .map(generateTripEvent);
-
+    .map(getTripPoint);
 };
 
-export {generateTripEvent, generateTripEvents};
+/**
+ *
+ * @param {array} events
+ * @return {*}
+ */
+export const groupTripPointsByDay = (events) => {
+  let counter = 1;
+  return events.reduce((days, point) => {
+    let currentDay = new Date(point.dateStart).setHours(0, 0, 0, 0);
+
+    if (days.has(currentDay)) {
+      days.get(currentDay).points.push(point);
+    } else {
+      days.set(currentDay, {
+        date: point.dateStart,
+        counter,
+        points: [point],
+      });
+
+      counter++;
+    }
+
+    return days;
+  }, new Map());
+};

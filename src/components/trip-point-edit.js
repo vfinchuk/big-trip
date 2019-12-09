@@ -1,94 +1,104 @@
-import {moment, EventTypes, Cities, Services} from '../const';
-import {createElement} from '../utils';
+import AbstractComponent from './abstract-component';
+import {EventTypeEnum, LOCATIONS} from '../mock/consts';
+import {moment} from '../utils/common';
+import {getEventPlaceholder} from '../mock/trip-event';
 
-const createEventTypeMarkup = (types, currentType) => {
-  return types.map((type, index) => {
-
-    return (
-      `<div class="event__type-item">
-        <input 
-        id="event-type-${type}-${index}" 
-        class="event__type-input  visually-hidden" 
-        type="radio" name="event-type" 
-        value="${type}"
-        ${currentType === type ? `checked` : ``}
+/**
+ *
+ * @param {object} types
+ * @param {object} currentType
+ * @param {string} typeGroup - filtered types by pointed group [transfer, activity]
+ * @return {string|*}
+ */
+const createEventTypeMarkup = (types, currentType, typeGroup) => {
+  return Object.values(types)
+    .filter((type) => type.group === typeGroup)
+    .map((type, index) => {
+      return (
+        `<div class="event__type-item">
+        <input
+        id="event-type-${type.code}-${index}"
+        class="event__type-input  visually-hidden"
+        type="radio" name="event-type"
+        value="${type.code}"
+        ${currentType.code === type.code ? `checked` : ``}
         />
-        <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-${index}">${type}</label>
+        <label class="event__type-label  event__type-label--${type.code}" for="event-type-${type.code}-${index}">${type.code}</label>
        </div>`
-    );
-  })
-    .join(`\n`);
+      );
+    }).join(`\n`);
 };
 
-const createDestinationMarkup = (cities, currentCity) => {
-  return cities.map((city) => {
+/**
+ *
+ * @param {array} locations - all available locations
+ * @param {object} currentLocation
+ * @return {string|*}
+ */
+const createDestinationMarkup = (locations, currentLocation) => {
+  return locations.map((location) => {
     return (
-      `<option 
-        value="${city}"
-        ${currentCity === city ? `checked` : ``}
+      `<option
+        value="${location.name}"
+        ${currentLocation.name === location.name ? `checked` : ``}
         ></option>`
     );
-  })
-    .join(`\n`);
+  }).join(`\n`);
 };
 
-const createAdditionalServicesMarkup = (services, currentServices) => {
-  return services.map((service, index) => {
-    const {type, name, price} = service;
-
-    let isCurrent = false;
-    Array.from(currentServices).forEach((currentService) => {
-      const {type: currentType, name: currentName, price: currentPrice} = currentService;
-
-      if (type === currentType && name === currentName && price === currentPrice) {
-        isCurrent = true;
-      }
-    });
-
-    return (
-      `<div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-${index}" type="checkbox" name="event-offer-comfort" 
-          ${isCurrent ? `checked` : ``}
-          >
-          <label class="event__offer-label" for="event-offer-comfort-${index}">
-            <span class="event__offer-title">${type} ${name}</span>
-            &plus;
-            &euro;&nbsp;<span class="event__offer-price">${price}</span>
-          </label>
-       </div>`
-    );
-  })
-   .join(`\n`);
+/**
+ *
+ * @param {map} offers
+ * @return {string}
+ */
+const createOffersMarkup = (offers) => {
+  return [...offers.values()].map((offer, index) => {
+    return `<div class="event__offer-selector">
+               <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-${index}" type="checkbox" name="event-offer-comfort"
+               ${offer.isChecked ? `checked` : ``}
+               >
+               <label class="event__offer-label" for="event-offer-comfort-${index}">
+                 <span class="event__offer-title">${offer.title}</span>
+                 &plus;
+                 &euro;&nbsp;<span class="event__offer-price">${offer.price}</span>
+               </label>
+            </div>`;
+  }).join(``);
 };
 
+/**
+ *
+ * @param {array} photos
+ * @return {string|*}
+ */
 const createPhotosMarkup = (photos) => {
   return photos.map((photo) => {
     return (
       `<img class="event__photo" src="${photo}" alt="Event photo">`
     );
-  })
-    .join(`\n`);
+  }).join(`\n`);
 };
 
-
+/**
+ *
+ * @param {object} point
+ * @return {string}
+ */
 const createTripPointEditTemplate = (point) => {
+  const {type, location, price, photos, dateStart, dateEnd, offers, description} = point;
 
+  const destinations = createDestinationMarkup(LOCATIONS, location);
 
-  const {type, city, price, photos, time, extraServices, description} = point;
-  const {start, end} = time;
+  const offersList = createOffersMarkup(offers);
 
-  const transferTypes = createEventTypeMarkup(EventTypes.slice(0, 7), type);
-  const activityTypes = createEventTypeMarkup(EventTypes.slice(7), type);
+  const transferTypes = createEventTypeMarkup(EventTypeEnum, type, `transfer`);
+  const activityTypes = createEventTypeMarkup(EventTypeEnum, type, `activity`);
 
-  const destinations = createDestinationMarkup(Cities, city);
+  const startTime = moment(dateStart).format(`HH:mm`);
+  const endTime = moment(dateEnd).format(`HH:mm`);
 
-  const startTime = moment(start).format(`HH:mm`);
-  const endTime = moment(end).format(`HH:mm`);
-
-  const startDate = moment(start).format(`YYYY/MM/DD`);
-  const endDate = moment(end).format(`YYYY/MM/DD`);
-
-  const services = createAdditionalServicesMarkup(Services, extraServices);
+  const startDate = moment(dateStart).format(`YYYY/MM/DD`);
+  const endDate = moment(dateEnd).format(`YYYY/MM/DD`);
 
   const images = createPhotosMarkup(photos);
 
@@ -98,7 +108,7 @@ const createTripPointEditTemplate = (point) => {
         <div class="event__type-wrapper">
           <label class="event__type  event__type-btn" for="event-type-toggle-1">
             <span class="visually-hidden">Choose event type</span>
-            <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
+            <img class="event__type-icon" width="17" height="17" src="img/icons/${type.code}.png" alt="Event type icon">
           </label>
           <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -117,9 +127,9 @@ const createTripPointEditTemplate = (point) => {
 
         <div class="event__field-group  event__field-group--destination">
           <label class="event__label  event__type-output" for="event-destination-1">
-            ${type} at
+             ${type.code} ${getEventPlaceholder(type)} 
           </label>
-          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${city}" list="destination-list-1">
+          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${location.name}" list="destination-list-1">
           <datalist id="destination-list-1">
             ${destinations}
           </datalist>
@@ -154,7 +164,7 @@ const createTripPointEditTemplate = (point) => {
           <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
           <div class="event__available-offers">
-            ${services}
+            ${offersList}
           </div>
         </section>
 
@@ -174,26 +184,19 @@ const createTripPointEditTemplate = (point) => {
 };
 
 
-export default class TripPointEdit {
+export default class TripPointEdit extends AbstractComponent {
   constructor(point) {
-    this._point = point;
+    super();
 
-    this._element = null;
+    this._point = point;
   }
 
   getTemplate() {
     return createTripPointEditTemplate(this._point);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  setSubmitHandler(handler) {
+    this.getElement().addEventListener(`submit`, handler);
   }
 
-  removeElement() {
-    this._element = null;
-  }
 }

@@ -1,14 +1,20 @@
-import {moment} from '../const';
-import {createElement, convertMinutesToHours} from '../utils';
+import AbstractComponent from './abstract-component';
+import {moment} from '../utils/common';
+import {getEventPlaceholder} from '../mock/trip-event';
 
-const generateAdditionalServicesMarkup = (options) => {
-  return Array.from(options)
-    .map((option) => {
-      const {type, name, price} = option;
-
+/**
+ *
+ * @param {array} offers
+ * @return {string}
+ */
+const generateOffersMarkup = (offers) => {
+  return Array.from(offers)
+    .filter((offer) => offer[1].isChecked === true)
+    .map((offer) => {
+      const {title, price} = offer[1];
       return (
         `<li class="event__offer">
-          <span class="event__offer-title">${type} ${name}</span>
+          <span class="event__offer-title">${title}</span>
           &plus;
           &euro;&nbsp;<span class="event__offer-price">${price}</span>
          </li>`
@@ -17,30 +23,58 @@ const generateAdditionalServicesMarkup = (options) => {
     .join(`\n`);
 };
 
+/**
+ * Return duration time in format: 4H 30M
+ * @param {int} dateStart timestamp
+ * @param {int} dateEnd timestamp
+ * @return {string}
+ */
+const getDurationTimeFormat = (dateStart, dateEnd) => {
+  const durationTime = moment.duration(
+      moment(dateEnd).diff(moment(dateStart))
+  );
 
+  const days = durationTime.days();
+  const hours = durationTime.hours();
+  const minutes = durationTime.minutes();
+
+  const daysFormat = days >= 10 ? days : `0${days}`;
+  const minutesFormant = minutes >= 10 ? minutes : `0${minutes}`;
+
+  if (minutes === 0) {
+    return `${hours}H`;
+  } else if (hours === 0) {
+    return `${minutesFormant}M`;
+  } else if (days === 0) {
+    return `${hours}H ${minutesFormant}M`;
+  } else {
+    return `${daysFormat}D ${hours}H ${minutesFormant}M`;
+  }
+
+};
+
+/**
+ *
+ * @param {object} point
+ * @return {string}
+ */
 const createTripPointTemplate = (point) => {
 
-  const {type, city, price, time, extraServices} = point;
+  const {type, location, price, dateStart, dateEnd, offers} = point;
 
-  const {start, end, duration} = time;
+  const startTime = moment(dateStart).format(`HH:mm`);
+  const endTime = moment(dateEnd).format(`HH:mm`);
 
-  const startTime = moment(start).format(`HH:mm`);
-  const endTime = moment(end).format(`HH:mm`);
-
-  const startDate = moment(start).format(`YYYY-MM-DD`);
-  const endDate = moment(end).format(`YYYY-MM-DD`);
-
-  const durationTime = convertMinutesToHours(duration);
-
-  const services = generateAdditionalServicesMarkup(extraServices);
+  const startDate = moment(dateStart).format(`YYYY-MM-DD`);
+  const endDate = moment(dateEnd).format(`YYYY-MM-DD`);
 
   return (
     `<li class="trip-events__item">
       <div class="event">
         <div class="event__type">
-          <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
+          <img class="event__type-icon" width="42" height="42" src="img/icons/${type.code}.png" alt="Event type icon">
         </div>
-        <h3 class="event__title">${type} to ${city}</h3>
+        <h3 class="event__title">${type.code} ${getEventPlaceholder(type)} ${location.name}</h3>
 
         <div class="event__schedule">
           <p class="event__time">
@@ -48,7 +82,7 @@ const createTripPointTemplate = (point) => {
             &mdash;
             <time class="event__end-time" datetime="${endDate}T${endTime}">${endTime}</time>
           </p>
-          <p class="event__duration">${durationTime}</p>
+          <p class="event__duration">${getDurationTimeFormat(dateStart, dateEnd)}</p>
         </div>
 
         <p class="event__price">
@@ -57,7 +91,7 @@ const createTripPointTemplate = (point) => {
 
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
-          ${services}
+          ${generateOffersMarkup(offers)}
         </ul>
 
         <button class="event__rollup-btn" type="button">
@@ -69,26 +103,20 @@ const createTripPointTemplate = (point) => {
 };
 
 
-export default class TripPoint {
+export default class TripPoint extends AbstractComponent {
   constructor(point) {
-    this._point = point;
+    super();
 
-    this._element = null;
+    this._point = point;
   }
 
   getTemplate() {
     return createTripPointTemplate(this._point);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  setEditButtonClickHandler(handler) {
+    this.getElement().querySelector(`.event__rollup-btn`)
+      .addEventListener(`click`, handler);
   }
 
-  removeElement() {
-    this._element = null;
-  }
 }
