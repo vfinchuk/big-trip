@@ -137,12 +137,12 @@ export const getTripPoints = (count) => {
 
 /**
  *
- * @param {array} events
+ * @param {Array} points
  * @return {*}
  */
-export const groupTripPointsByDay = (events) => {
+export const groupTripPointsByDay = (points) => {
   let counter = 1;
-  return events.reduce((days, point) => {
+  return points.reduce((days, point) => {
     let currentDay = new Date(point.dateStart).setHours(0, 0, 0, 0);
 
     if (days.has(currentDay)) {
