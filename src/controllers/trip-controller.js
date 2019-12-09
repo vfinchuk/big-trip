@@ -1,4 +1,4 @@
-import {moment} from '../utils/common';
+import moment from 'moment';
 import {render, RenderPosition, replace} from '../utils/render';
 import {groupTripPointsByDay} from '../mock/trip-point';
 

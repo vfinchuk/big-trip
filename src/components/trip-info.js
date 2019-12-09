@@ -1,4 +1,4 @@
-import {moment} from '../utils/common';
+import moment from 'moment';
 import AbstractComponent from '../components/abstract-component';
 
 /**
