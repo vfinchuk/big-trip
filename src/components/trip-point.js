@@ -69,7 +69,7 @@ const createTripPointTemplate = (point) => {
   const startDate = moment(dateStart).format(`YYYY-MM-DD`);
   const endDate = moment(dateEnd).format(`YYYY-MM-DD`);
 
-  const offersList = generateOffersMarkup(offers, 3);
+  const offersList = generateOffersMarkup(offers);
 
   return (
     `<li class="trip-events__item">
