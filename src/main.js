@@ -1,7 +1,7 @@
 /* Import utils and constants */
 import {RenderPosition, render} from './utils/render';
 import {getTotalAmount} from './utils/common';
-import {getTripPoints} from './mock/trip-event';
+import {getTripPoints} from './mock/trip-point';
 import {getFilters} from './mock/filters';
 
 import TripController from './controllers/trip-controller';

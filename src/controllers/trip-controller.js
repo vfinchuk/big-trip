@@ -1,5 +1,5 @@
 import {render, RenderPosition, replace} from '../utils/render';
-import {groupTripPointsByDay} from '../mock/trip-event';
+import {groupTripPointsByDay} from '../mock/trip-point';
 
 import TripPointEditComponent from '../components/trip-point-edit';
 import TripPointComponent from '../components/trip-point';

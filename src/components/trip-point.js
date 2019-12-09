@@ -1,6 +1,6 @@
 import AbstractComponent from './abstract-component';
 import {moment} from '../utils/common';
-import {getEventPlaceholder} from '../mock/trip-event';
+import {getEventPlaceholder} from '../mock/trip-point';
 
 /**
  *

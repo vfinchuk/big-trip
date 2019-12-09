@@ -1,7 +1,7 @@
 import AbstractComponent from './abstract-component';
 import {EventTypeEnum, LOCATIONS} from '../mock/consts';
 import {moment} from '../utils/common';
-import {getEventPlaceholder} from '../mock/trip-event';
+import {getEventPlaceholder} from '../mock/trip-point';
 
 /**
  *
