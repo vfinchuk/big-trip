@@ -77,6 +77,19 @@ export default class Sort extends AbstractComponent {
   }
 
   /**
+   * Toggle day sort item title
+   * @param {string} currentSortType
+   * @private
+   */
+  _toggleDaySortItemTitle(currentSortType) {
+    const daySortItem = this.getElement().querySelector(`.trip-sort__item--day`);
+    if (currentSortType !== SortType.DEFAULT) {
+      daySortItem.innerHTML = ``;
+      return;
+    }
+    daySortItem.innerHTML = `Day`;
+  }
+  /**
    * Change sort type handler
    * @param {function} handler
    */
@@ -94,6 +107,8 @@ export default class Sort extends AbstractComponent {
       }
 
       this._currentSortType = sortType;
+
+      this._toggleDaySortItemTitle(this._currentSortType);
 
       handler(this._currentSortType);
     });
