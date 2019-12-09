@@ -2,6 +2,7 @@
 import {RenderPosition, render} from './utils/render';
 import {getTotalAmount} from './utils/common';
 import {getTripPoints} from './mock/trip-event';
+import {getFilters} from './mock/filters';
 
 import TripController from './controllers/trip-controller';
 /* Import app components */
@@ -23,7 +24,7 @@ const tripControlsElement = headerElement.querySelector(`.trip-controls`);
 /* Render header elements */
 render(tripInfoElement, new TripInfoComponent(tripPoints), RenderPosition.AFTERBEGIN);
 render(tripControlsElement.children[0], new SiteMenuComponent(), RenderPosition.AFTEREND);
-render(tripControlsElement.children[1], new FilterComponent(), RenderPosition.AFTEREND);
+render(tripControlsElement.children[1], new FilterComponent(getFilters()), RenderPosition.AFTEREND);
 
 /* Show total trip sum */
 const totalAmountElement = headerElement.querySelector(`.trip-info__cost-value`);
