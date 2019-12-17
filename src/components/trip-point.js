@@ -1,6 +1,6 @@
 import AbstractComponent from './abstract-component';
-import {moment} from '../utils/common';
-import {getEventPlaceholder} from '../mock/trip-event';
+import moment from 'moment';
+import {getEventPlaceholder} from '../mock/trip-point';
 
 /**
  *
@@ -20,6 +20,7 @@ const generateOffersMarkup = (offers) => {
          </li>`
       );
     })
+    .slice(0, 3)
     .join(`\n`);
 };
 
@@ -59,14 +60,17 @@ const getDurationTimeFormat = (dateStart, dateEnd) => {
  * @return {string}
  */
 const createTripPointTemplate = (point) => {
-
+  const timeFormat = `HH:mm`;
+  const dateFormat = `YYYY-MM-DD`;
   const {type, location, price, dateStart, dateEnd, offers} = point;
 
-  const startTime = moment(dateStart).format(`HH:mm`);
-  const endTime = moment(dateEnd).format(`HH:mm`);
+  const startTime = moment(dateStart).format(timeFormat);
+  const endTime = moment(dateEnd).format(timeFormat);
 
-  const startDate = moment(dateStart).format(`YYYY-MM-DD`);
-  const endDate = moment(dateEnd).format(`YYYY-MM-DD`);
+  const startDate = moment(dateStart).format(dateFormat);
+  const endDate = moment(dateEnd).format(dateFormat);
+
+  const offersList = generateOffersMarkup(offers);
 
   return (
     `<li class="trip-events__item">
@@ -91,7 +95,7 @@ const createTripPointTemplate = (point) => {
 
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
-          ${generateOffersMarkup(offers)}
+          ${offersList}
         </ul>
 
         <button class="event__rollup-btn" type="button">
