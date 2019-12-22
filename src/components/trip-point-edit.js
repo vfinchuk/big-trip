@@ -1,4 +1,5 @@
-import AbstractComponent from './abstract-component';
+import flatpickr from 'flatpickr';
+import AbstractSmartComponent from './abstract-smart-component';
 import {EventTypeEnum, LOCATIONS} from '../mock/consts';
 import moment from 'moment';
 import {getEventPlaceholder} from '../mock/trip-point';
@@ -184,7 +185,7 @@ const createTripPointEditTemplate = (point) => {
 };
 
 
-export default class TripPointEdit extends AbstractComponent {
+export default class TripPointEdit extends AbstractSmartComponent {
   constructor(point) {
     super();
 
@@ -195,8 +196,24 @@ export default class TripPointEdit extends AbstractComponent {
     return createTripPointEditTemplate(this._point);
   }
 
-  setSubmitHandler(handler) {
-    this.getElement().addEventListener(`submit`, handler);
+  recoveryListeners() {
+
   }
+
+  rerender() {
+    super.rerender();
+  }
+
+  reset() {
+    const point = this._point;
+  }
+
+  setSubmitHandler(handler) {
+    this.getElement().addEventListener(`submit`, (evt) => {
+      evt.preventDefault();
+      handler();
+    });
+  }
+
 
 }

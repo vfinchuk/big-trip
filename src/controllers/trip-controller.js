@@ -1,4 +1,3 @@
-import moment from 'moment';
 import {render, RenderPosition} from '../utils/render';
 import {groupTripPointsByDay} from '../mock/trip-point';
 
@@ -9,59 +8,12 @@ import NoPointsComponent from '../components/no-points';
 
 import PointController from './point-controller';
 
-/**
- * Rendering trip points
- * @param {Object} boardComponent
- * @param {function} tripDayComponent
- * @param {Array} points
- * @param {callback} onDataChange
- * @param {callback}onVIewChange
- */
-function renderTripPoints(boardComponent, tripDayComponent, points, onDataChange, onVIewChange) {
-
-  const boardElement = boardComponent.getElement();
-  render(boardElement, tripDayComponent(), RenderPosition.BEFOREEND);
-
-  const tripEventsListElement = boardElement.querySelector(`.trip-events__list`);
-  return points.map((point) => {
-    const pointController = new PointController(tripEventsListElement, onDataChange, onVIewChange);
-    pointController.render(point);
-    return pointController;
-  });
-}
-
-/**
- * Rendering trip points by day
- * @param {Object} boardComponent
- * @param {function} tripDayComponent
- * @param {Array} pointsByDay
- * @param {callback} onDataChange
- * @param {callback}onVIewChange
- */
-function renderTripPointsByDay(boardComponent, tripDayComponent, pointsByDay, onDataChange, onVIewChange) {
-  let pointControllersArray = [];
-
-  [...pointsByDay].map((day, index) => {
-
-    render(boardComponent.getElement(), tripDayComponent(day[1].date, day[1].counter), RenderPosition.BEFOREEND);
-
-    const tripEventsListElement = boardComponent.getElement()
-      .querySelectorAll(`.trip-days__item`)[index]
-      .querySelector(`.trip-events__list`);
-
-    day[1].points.map((point) => {
-      const pointController = new PointController(tripEventsListElement, onDataChange, onVIewChange);
-      pointController.render(point);
-
-      pointControllersArray.push(pointController);
-    });
-  });
-
-  return pointControllersArray;
-}
-
 
 export default class TripController {
+  /**
+   * Trip controller
+   * @param {HTMLElement} container
+   */
   constructor(container) {
 
     this._container = container;
@@ -70,19 +22,15 @@ export default class TripController {
     this._boardComponent = new BoardComponent();
     this._noPointsComponent = new NoPointsComponent();
 
-    this._showedPointControllers = [];
+    this._pointControllers = [];
     this._points = [];
     this._pointsByDay = [];
+
     this._onDataChange = this._onDataChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
 
     this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
-  }
-
-
-  _createTripDay(date, counter) {
-    return new TripDayComponent(date, counter);
   }
 
   /**
@@ -92,33 +40,75 @@ export default class TripController {
   render(points) {
     this._points = points;
     this._pointsByDay = groupTripPointsByDay(points);
+
     if (points.length < 0) {
-      /**
-       * Rendering no trip points massage
-       */
       render(this._container, this._noPointsComponent, RenderPosition.BEFOREEND);
     } else {
 
-      /**
-       * Rendering sort and tripBoard elements
-       */
       render(this._container, this._sortComponent, RenderPosition.BEFOREEND);
       render(this._container, this._boardComponent, RenderPosition.BEFOREEND);
 
-
-      const newPointsByDay = renderTripPointsByDay(
-          this._boardComponent,
-          this._createTripDay,
-          this._pointsByDay,
-          this._onDataChange,
-          this._onViewChange
-      );
-
-      this._showedPointControllers = this._showedPointControllers.concat(newPointsByDay);
-
+      this._renderTripPointsByDay(this._pointsByDay, this._onDataChange, this._onViewChange);
     }
   }
 
+  /**
+   * Rendering trip points
+   * @param {Array} points
+   * @private
+   */
+  _renderTripPoints(points) {
+    const tripDay = new TripDayComponent();
+    const boardElement = this._boardComponent.getElement();
+
+    render(boardElement, tripDay, RenderPosition.BEFOREEND);
+
+    const tripEventsListElement = boardElement.querySelector(`.trip-events__list`);
+    return points.map((point) => {
+      this._renderTripPoint(point, tripEventsListElement);
+    });
+  }
+
+  /**
+   * Render trip points by day
+   * @param {Array} pointsByDay
+   * @private
+   */
+  _renderTripPointsByDay(pointsByDay) {
+    [...pointsByDay].map((day, index) => {
+      const tripDay = new TripDayComponent(day[1].date, index + 1);
+      render(this._boardComponent.getElement(), tripDay, RenderPosition.BEFOREEND);
+
+      const tripEventsListElement = tripDay.getElement().querySelector(`.trip-events__list`);
+
+      day[1].points.map((point) => {
+        this._renderTripPoint(point, tripEventsListElement);
+      });
+    });
+  }
+
+  /**
+   * Rendering trip point element
+   * @param {Object} point
+   * @param {HTMLElement} container
+   *
+   * @private
+   */
+  _renderTripPoint(point, container) {
+    const pointController = new PointController(container, this._onDataChange, this._onViewChange);
+
+    this._pointControllers.push(pointController);
+    pointController.render(point);
+  }
+
+  /**
+   *
+   * @param {Object} pointController
+   * @param {Object} oldData
+   * @param {Object} newData
+   *
+   * @private
+   */
   _onDataChange(pointController, oldData, newData) {
     const index = this._points.findIndex((it) => it === oldData);
 
@@ -131,28 +121,31 @@ export default class TripController {
     pointController.render(this._points[index]);
   }
 
+  /**
+   * Callback before point will change
+   *
+   * @private
+   */
   _onViewChange() {
-    this._showedPointControllers.forEach((it) => it.setDefaultView());
+    if (this._pointControllers) {
+      this._pointControllers.forEach((pointController) => {
+        pointController.setDefaultView();
+      });
+    }
   }
 
   /**
-   * Sorting event listener
+   * Sorting trip events
+   * @param {string} sortType
+   *
+   * @private
    */
   _onSortTypeChange(sortType) {
 
     let sortedPoints = [];
     switch (sortType) {
       case SortType.TIME:
-        sortedPoints = this._points.slice().sort((a, b) => {
-          const durationA = moment.duration(
-              moment(a.dateEnd).diff(moment(a.dateStart))
-          );
-          const durationB = moment.duration(
-              moment(b.dateEnd).diff(moment(b.dateStart))
-          );
-
-          return durationB - durationA;
-        });
+        sortedPoints = this._points.slice().sort((a, b) => (b.dateEnd - b.dateStart) - (a.dateEnd - a.dateStart));
         break;
       case SortType.PRICE:
         sortedPoints = this._points.slice().sort((a, b) => b.price - a.price);
@@ -162,33 +155,12 @@ export default class TripController {
         break;
     }
 
-
     this._boardComponent.getElement().innerHTML = ``;
 
     if (sortType === SortType.DEFAULT) {
-
-      const newPointsByDay = renderTripPointsByDay(
-          this._boardComponent,
-          this._createTripDay,
-          this._pointsByDay,
-          this._onDataChange,
-          this._onViewChange
-      );
-
-      this._showedPointControllers = this._showedPointControllers.concat(newPointsByDay);
-
+      this._renderTripPointsByDay(this._pointsByDay);
     } else {
-
-      const sortedPointControllers = renderTripPoints(
-          this._boardComponent,
-          this._createTripDay,
-          sortedPoints,
-          this._onDataChange,
-          this._onViewChange
-      );
-
-      this._showedPointControllers = this._showedPointControllers.concat(sortedPointControllers);
-
+      this._renderTripPoints(sortedPoints);
     }
   }
 }
