@@ -39,9 +39,9 @@ export default class TripDay extends AbstractComponent {
   /**
    * Create TripDay
    * @param {Object} date
-   * @param {int} dayCount
+   * @param {int|null} dayCount
    */
-  constructor(date, dayCount) {
+  constructor(date = null, dayCount = null) {
     super();
 
     this._dayCount = dayCount;
