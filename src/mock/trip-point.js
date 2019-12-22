@@ -141,7 +141,6 @@ export const getTripPoints = (count) => {
  * @return {*}
  */
 export const groupTripPointsByDay = (points) => {
-  let counter = 1;
   return points.reduce((days, point) => {
     let currentDay = new Date(point.dateStart).setHours(0, 0, 0, 0);
 
@@ -150,11 +149,8 @@ export const groupTripPointsByDay = (points) => {
     } else {
       days.set(currentDay, {
         date: point.dateStart,
-        counter,
         points: [point],
       });
-
-      counter++;
     }
 
     return days;
