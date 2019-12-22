@@ -71,12 +71,13 @@ export default class TripController {
     this._noPointsComponent = new NoPointsComponent();
 
     this._showedPointControllers = [];
-
-    // this._onDataChange = this._onDataChange.bind(this);
+    this._points = [];
+    this._pointsByDay = [];
+    this._onDataChange = this._onDataChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
-    // this._onSortTypeChange = this._onSortTypeChange.bind(this);
+    this._onSortTypeChange = this._onSortTypeChange.bind(this);
 
-
+    this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
   }
 
 
@@ -89,7 +90,8 @@ export default class TripController {
    * @param {Array} points
    */
   render(points) {
-
+    this._points = points;
+    this._pointsByDay = groupTripPointsByDay(points);
     if (points.length < 0) {
       /**
        * Rendering no trip points massage
@@ -104,12 +106,10 @@ export default class TripController {
       render(this._container, this._boardComponent, RenderPosition.BEFOREEND);
 
 
-      const pointsByDay = groupTripPointsByDay(points);
-
       const newPointsByDay = renderTripPointsByDay(
           this._boardComponent,
           this._createTripDay,
-          pointsByDay,
+          this._pointsByDay,
           this._onDataChange,
           this._onViewChange
       );
@@ -119,6 +119,17 @@ export default class TripController {
     }
   }
 
+  _onDataChange(pointController, oldData, newData) {
+    const index = this._points.findIndex((it) => it === oldData);
+
+    if (index === -1) {
+      return;
+    }
+
+    this._points = [].concat(this._points.slice(0, index), newData, this._points.slice(index + 1));
+
+    pointController.render(this._points[index]);
+  }
 
   _onViewChange() {
     this._showedPointControllers.forEach((it) => it.setDefaultView());
@@ -127,35 +138,57 @@ export default class TripController {
   /**
    * Sorting event listener
    */
-  // _setSortTypeChangeHandler(sortType) {
-  //   let sortedPoints = [];
-  //   switch (sortType) {
-  //     case SortType.TIME:
-  //       sortedPoints = points.slice().sort((a, b) => {
-  //         const durationA = moment.duration(
-  //           moment(a.dateEnd).diff(moment(a.dateStart))
-  //         );
-  //         const durationB = moment.duration(
-  //           moment(b.dateEnd).diff(moment(b.dateStart))
-  //         );
-  //
-  //         return durationB - durationA;
-  //       });
-  //       break;
-  //     case SortType.PRICE:
-  //       sortedPoints = points.slice().sort((a, b) => b.price - a.price);
-  //       break;
-  //     case SortType.DEFAULT:
-  //       sortedPoints = groupTripPointsByDay(points);
-  //       break;
-  //   }
-  //
-  //   this._boardComponent.getElement().innerHTML = ``;
-  //
-  //   if (sortType === SortType.DEFAULT) {
-  //     renderTripPointsByDays(this._boardComponent, this._createTripDay, sortedPoints);
-  //   } else {
-  //     renderTripPoints(this._boardComponent, this._createTripDay(null, null), sortedPoints);
-  //   }
-  // };
+  _onSortTypeChange(sortType) {
+
+    let sortedPoints = [];
+    switch (sortType) {
+      case SortType.TIME:
+        sortedPoints = this._points.slice().sort((a, b) => {
+          const durationA = moment.duration(
+              moment(a.dateEnd).diff(moment(a.dateStart))
+          );
+          const durationB = moment.duration(
+              moment(b.dateEnd).diff(moment(b.dateStart))
+          );
+
+          return durationB - durationA;
+        });
+        break;
+      case SortType.PRICE:
+        sortedPoints = this._points.slice().sort((a, b) => b.price - a.price);
+        break;
+      case SortType.DEFAULT:
+        sortedPoints = groupTripPointsByDay(this._points);
+        break;
+    }
+
+
+    this._boardComponent.getElement().innerHTML = ``;
+
+    if (sortType === SortType.DEFAULT) {
+
+      const newPointsByDay = renderTripPointsByDay(
+          this._boardComponent,
+          this._createTripDay,
+          this._pointsByDay,
+          this._onDataChange,
+          this._onViewChange
+      );
+
+      this._showedPointControllers = this._showedPointControllers.concat(newPointsByDay);
+
+    } else {
+
+      const sortedPointControllers = renderTripPoints(
+          this._boardComponent,
+          this._createTripDay,
+          sortedPoints,
+          this._onDataChange,
+          this._onViewChange
+      );
+
+      this._showedPointControllers = this._showedPointControllers.concat(sortedPointControllers);
+
+    }
+  }
 }
