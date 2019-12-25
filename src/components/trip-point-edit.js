@@ -1,8 +1,7 @@
 import AbstractSmartComponent from './abstract-smart-component';
 import {EventTypeEnum} from '../mock/consts';
-import {LOCATIONS} from '../mock/locations';
 import moment from 'moment';
-import {getEventPlaceholder} from '../mock/trip-point';
+import {getEventPlaceholder, getLocationsByEventType} from '../mock/trip-point';
 
 /**
  *
@@ -87,9 +86,9 @@ const createPhotosMarkup = (photos) => {
  */
 const createTripPointEditTemplate = (point) => {
 
-  const {type, currentLocation, price, dateStart, dateEnd, offers} = point;
+  const {type, currentLocation, locations, price, dateStart, dateEnd, offers} = point;
 
-  const destinations = createDestinationMarkup(LOCATIONS, currentLocation);
+  const destinations = createDestinationMarkup(locations, currentLocation);
 
   const offersList = createOffersMarkup(offers);
 
@@ -132,7 +131,7 @@ const createTripPointEditTemplate = (point) => {
             <label class="event__label  event__type-output" for="event-destination-1">
                ${type.code} ${getEventPlaceholder(type)} 
             </label>
-            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${currentLocation.name}" list="destination-list-1">
+            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${currentLocation.name}" list="destination-list-1" autocomplete="off">
             <datalist id="destination-list-1">
               ${destinations}
             </datalist>
@@ -257,8 +256,13 @@ export default class TripPointEdit extends AbstractSmartComponent {
       return;
     }
 
-    this._point.type = Object.assign({}, EventTypeEnum[evt.target.value.toUpperCase().replace(/-.+$/, ``)]);
+    const selectedEventType = EventTypeEnum[evt.target.value.toUpperCase().replace(/-.+$/, ``)];
+
+    this._point.locations = getLocationsByEventType(selectedEventType);
+    this._point.type = Object.assign({}, selectedEventType);
     this.rerender();
+
+    this.getElement().querySelector(`.event__input--destination`).value = ``;
   }
 
   /**
@@ -281,7 +285,18 @@ export default class TripPointEdit extends AbstractSmartComponent {
    * @private
    */
   _changeDestinationHandler(evt) {
-    console.log(evt);
+    if (evt.target.value === this._point.currentLocation.name) {
+      return;
+    }
+
+    const selectedLocation = this._point.locations.find((location) => location.name === evt.target.value);
+
+    if (!selectedLocation) {
+      return;
+    }
+
+    this._point.currentLocation = selectedLocation;
+    this.rerender();
   }
 
 }
