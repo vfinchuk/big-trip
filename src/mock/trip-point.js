@@ -1,5 +1,6 @@
 import {getRandomArrayItem, getRandomIntegerNumber} from '../utils/common';
-import {Description, EventTypeEnum, LOCATIONS, MillisecondsEnum} from '../mock/consts';
+import {EventTypeEnum, MillisecondsEnum} from '../mock/consts';
+import {LOCATIONS} from '../mock/locations';
 
 /**
  *
@@ -10,23 +11,6 @@ const getRandomType = (types) => {
   const values = Object.values(types);
 
   return values[Math.floor(Math.random() * values.length)];
-};
-
-/**
- *
- * @param {string} description
- * @return {string}
- */
-const generateDescription = (description) => {
-  const sentences = description.split(`. `);
-
-  let result = ``;
-
-  for (let i = 1; i <= getRandomIntegerNumber(1, 3); i++) {
-    result += `${getRandomArrayItem(sentences)}.`;
-  }
-
-  return result;
 };
 
 
@@ -47,17 +31,6 @@ export const getEventPlaceholder = (type) => {
   return placeholder;
 };
 
-/**
- *
- * @param {array} locations
- * @param {object} eventType
- * @return {*}
- */
-const getRandomLocation = (locations, eventType) => {
-  locations = locations.filter((location) => location.eventTypes.has(eventType));
-
-  return locations[Math.floor(Math.random() * locations.length)];
-};
 
 let lastPointDate = Date.now();
 
@@ -113,10 +86,8 @@ export const getTripPoint = () => {
   const type = getRandomType(EventTypeEnum);
 
   return {
-    location: getRandomLocation(LOCATIONS, type.code),
-    photos: new Array(5).fill(``).map(() => `http://picsum.photos/300/150?r=${Math.random()}`),
+    currentLocation: getRandomArrayItem(LOCATIONS),
     price: getRandomIntegerNumber(10, 150),
-    description: generateDescription(Description),
     dateStart,
     dateEnd,
     offers,

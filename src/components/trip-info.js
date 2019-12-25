@@ -20,8 +20,8 @@ const createTripInfoTemplate = (points) => {
     dates = startTrip.toUpperCase();
   }
 
-  const cities = points.filter((point) => point.location.type === `city`)
-    .map((point) => point.location.name);
+  const cities = points.filter((point) => point.currentLocation.type === `city`)
+    .map((point) => point.currentLocation.name);
 
   let title;
   if (cities.length > 3) {

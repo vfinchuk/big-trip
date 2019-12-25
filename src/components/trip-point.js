@@ -60,9 +60,10 @@ const getDurationTimeFormat = (dateStart, dateEnd) => {
  * @return {string}
  */
 const createTripPointTemplate = (point) => {
+
   const timeFormat = `HH:mm`;
   const dateFormat = `YYYY-MM-DD`;
-  const {type, location, price, dateStart, dateEnd, offers} = point;
+  const {type, currentLocation, price, dateStart, dateEnd, offers} = point;
 
   const startTime = moment(dateStart).format(timeFormat);
   const endTime = moment(dateEnd).format(timeFormat);
@@ -78,7 +79,7 @@ const createTripPointTemplate = (point) => {
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/${type.code}.png" alt="Event type icon">
         </div>
-        <h3 class="event__title">${type.code} ${getEventPlaceholder(type)} ${location.name}</h3>
+        <h3 class="event__title">${type.code} ${getEventPlaceholder(type)} ${currentLocation.name}</h3>
 
         <div class="event__schedule">
           <p class="event__time">

@@ -1,5 +1,6 @@
 import AbstractSmartComponent from './abstract-smart-component';
-import {EventTypeEnum, LOCATIONS} from '../mock/consts';
+import {EventTypeEnum} from '../mock/consts';
+import {LOCATIONS} from '../mock/locations';
 import moment from 'moment';
 import {getEventPlaceholder} from '../mock/trip-point';
 
@@ -85,9 +86,10 @@ const createPhotosMarkup = (photos) => {
  * @return {string}
  */
 const createTripPointEditTemplate = (point) => {
-  const {type, location, price, photos, dateStart, dateEnd, offers, description} = point;
 
-  const destinations = createDestinationMarkup(LOCATIONS, location);
+  const {type, currentLocation, price, dateStart, dateEnd, offers} = point;
+
+  const destinations = createDestinationMarkup(LOCATIONS, currentLocation);
 
   const offersList = createOffersMarkup(offers);
 
@@ -100,7 +102,7 @@ const createTripPointEditTemplate = (point) => {
   const startDate = moment(dateStart).format(`YYYY/MM/DD`);
   const endDate = moment(dateEnd).format(`YYYY/MM/DD`);
 
-  const images = createPhotosMarkup(photos);
+  const images = createPhotosMarkup(currentLocation.photos);
 
   return (
     `<li class="trip-events__item">
@@ -130,7 +132,7 @@ const createTripPointEditTemplate = (point) => {
             <label class="event__label  event__type-output" for="event-destination-1">
                ${type.code} ${getEventPlaceholder(type)} 
             </label>
-            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${location.name}" list="destination-list-1">
+            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${currentLocation.name}" list="destination-list-1">
             <datalist id="destination-list-1">
               ${destinations}
             </datalist>
@@ -171,7 +173,7 @@ const createTripPointEditTemplate = (point) => {
   
           <section class="event__section  event__section--destination">
             <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-            <p class="event__destination-description">${description}</p>
+            <p class="event__destination-description">${currentLocation.description}</p>
   
             <div class="event__photos-container">
               <div class="event__photos-tape">
