@@ -18,7 +18,7 @@ const getRandomType = (types) => {
  * @param {Object} eventType
  * @return {Array}
  */
-const getLocationsByEventType = (eventType) => {
+export const getLocationsByEventType = (eventType) => {
   const eventTypeLocations = LOCATIONS.filter((location) => location.eventTypes.has(eventType.code));
   return shuffleArray(eventTypeLocations).slice(0, getRandomIntegerNumber(2, 4));
 };
