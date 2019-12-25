@@ -50,6 +50,7 @@ export default class PointController {
     };
 
     this._tripPointEditComponent.closeHandler = () => {
+      this._tripPointEditComponent.reset(); // TODO How reset data ?
       this._replaceEditToPoint();
     };
 

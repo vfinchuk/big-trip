@@ -1,5 +1,5 @@
 import AbstractSmartComponent from './abstract-smart-component';
-import {EventTypeEnum} from '../mock/consts';
+import {EventTypes} from '../mock/consts';
 import moment from 'moment';
 import {getEventPlaceholder, getLocationsByEventType} from '../mock/trip-point';
 
@@ -52,15 +52,16 @@ const createDestinationMarkup = (locations, currentLocation) => {
  * @return {string}
  */
 const createOffersMarkup = (offers) => {
-  return [...offers.values()].map((offer, index) => {
+  return [...offers].map((offer) => {
+    const [code, data] = offer;
     return `<div class="event__offer-selector">
-               <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-${index}" type="checkbox" name="event-offer-comfort"
-               ${offer.isChecked ? `checked` : ``}
+               <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-${code}-1" type="checkbox" name="event-offer-${code}"
+               ${data.isChecked ? `checked` : ``}
                >
-               <label class="event__offer-label" for="event-offer-comfort-${index}">
-                 <span class="event__offer-title">${offer.title}</span>
+               <label class="event__offer-label" for="event-offer-comfort-${code}-1">
+                 <span class="event__offer-title">${data.title}</span>
                  &plus;
-                 &euro;&nbsp;<span class="event__offer-price">${offer.price}</span>
+                 &euro;&nbsp;<span class="event__offer-price">${data.price}</span>
                </label>
             </div>`;
   }).join(``);
@@ -86,14 +87,14 @@ const createPhotosMarkup = (photos) => {
  */
 const createTripPointEditTemplate = (point) => {
 
-  const {type, currentLocation, locations, price, dateStart, dateEnd, offers} = point;
+  const {type, currentLocation, locations, price, dateStart, dateEnd, isFavorite, offers} = point;
 
   const destinations = createDestinationMarkup(locations, currentLocation);
 
   const offersList = createOffersMarkup(offers);
 
-  const transferTypes = createEventTypeMarkup(EventTypeEnum, currentLocation.type, `transfer`);
-  const activityTypes = createEventTypeMarkup(EventTypeEnum, currentLocation.type, `activity`);
+  const transferTypes = createEventTypeMarkup(EventTypes, currentLocation.type, `transfer`);
+  const activityTypes = createEventTypeMarkup(EventTypes, currentLocation.type, `activity`);
 
   const startTime = moment(dateStart).format(`HH:mm`);
   const endTime = moment(dateEnd).format(`HH:mm`);
@@ -159,6 +160,16 @@ const createTripPointEditTemplate = (point) => {
   
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
           <button class="event__reset-btn" type="reset">Cancel</button>
+
+          <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" 
+          ${isFavorite ? `checked` : ``}
+          >
+          <label class="event__favorite-btn" for="event-favorite-1">
+            <span class="visually-hidden">Add to favorite</span>
+            <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
+              <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"/>
+            </svg>
+          </label>
         </header>
         <section class="event__details">
   
@@ -192,10 +203,13 @@ export default class TripPointEdit extends AbstractSmartComponent {
     super();
 
     this._point = point;
+    this._pointOld = point;
 
     this._changePointTypeHandler = this._changePointTypeHandler.bind(this);
     this._changePriceHandler = this._changePriceHandler.bind(this);
     this._changeDestinationHandler = this._changeDestinationHandler.bind(this);
+    this._selectOffersHandler = this._selectOffersHandler.bind(this);
+    this._selectFavoriteHandler = this._selectFavoriteHandler.bind(this);
 
     this._subscribeEventsHandler();
   }
@@ -220,6 +234,13 @@ export default class TripPointEdit extends AbstractSmartComponent {
 
     element.querySelector(`.event__input--destination`)
       .addEventListener(`change`, this._changeDestinationHandler);
+
+    element.querySelectorAll(`.event__offer-checkbox`).forEach((offer) => {
+      offer.addEventListener(`change`, this._selectOffersHandler);
+    });
+
+    element.querySelector(`.event__favorite-checkbox`)
+      .addEventListener(`click`, this._selectFavoriteHandler);
   }
 
 
@@ -227,7 +248,16 @@ export default class TripPointEdit extends AbstractSmartComponent {
     super.rerender();
   }
 
+  reset() {
+    const point = this._point;
+    console.log(this.getElement());
+    // TODO how reset data ?
+  }
 
+  /**
+   *
+   * @param {Function} callback
+   */
   set saveHandler(callback) {
     this.registerObserver(`form`, `submit`, (evt) => {
       evt.preventDefault();
@@ -236,7 +266,7 @@ export default class TripPointEdit extends AbstractSmartComponent {
   }
 
   /**
-   *
+   * Close form handler
    * @param {Function} callback
    */
   set closeHandler(callback) {
@@ -256,7 +286,7 @@ export default class TripPointEdit extends AbstractSmartComponent {
       return;
     }
 
-    const selectedEventType = EventTypeEnum[evt.target.value.toUpperCase().replace(/-.+$/, ``)];
+    const selectedEventType = EventTypes[evt.target.value.toUpperCase().replace(/-.+$/, ``)];
 
     this._point.locations = getLocationsByEventType(selectedEventType);
     this._point.type = Object.assign({}, selectedEventType);
@@ -296,6 +326,37 @@ export default class TripPointEdit extends AbstractSmartComponent {
     }
 
     this._point.currentLocation = selectedLocation;
+    this.rerender();
+  }
+
+  /**
+   * Select offers handler
+   * @param {Event} evt
+   * @private
+   */
+  _selectOffersHandler(evt) {
+    const selectedOfferName = evt.target.name.replace(/event-offer-/, ``);
+    const offer = this._point.offers.get(selectedOfferName);
+
+    if (offer.isChecked === evt.target.checked) {
+      return;
+    }
+
+    offer.isChecked = evt.target.checked;
+    this.rerender();
+  }
+
+  /**
+   * Select favorite point
+   * @param {Event} evt
+   * @private
+   */
+  _selectFavoriteHandler(evt) {
+    if (evt.target.checked === this._point.isFavorite) {
+      return;
+    }
+
+    this._point.isFavorite = evt.target.checked;
     this.rerender();
   }
 
