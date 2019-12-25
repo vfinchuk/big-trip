@@ -44,9 +44,14 @@ export default class PointController {
       document.addEventListener(`keydown`, this._onEscapeKeyDown);
     });
 
-    this._tripPointEditComponent.setSubmitHandler(() => {
+    this._tripPointEditComponent.saveHandler = (newData) => {
+      this._onDataChange(this, point, Object.assign({}, newData));
       this._replaceEditToPoint();
-    });
+    };
+
+    this._tripPointEditComponent.closeHandler = () => {
+      this._replaceEditToPoint();
+    };
 
     if (oldTripPointComponent && oldTripPointEditComponent) {
       replace(this._tripPointComponent, oldTripPointComponent);
@@ -81,7 +86,7 @@ export default class PointController {
    * @private
    */
   _replaceEditToPoint() {
-    this._tripPointEditComponent.reset();
+    // this._tripPointEditComponent.reset();
 
     replace(this._tripPointComponent, this._tripPointEditComponent);
     this._mode = Mode.DEFAULT;
