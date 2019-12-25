@@ -1,4 +1,4 @@
-import {getRandomArrayItem, getRandomIntegerNumber} from '../utils/common';
+import {getRandomIntegerNumber, shuffleArray} from '../utils/common';
 import {EventTypeEnum, MillisecondsEnum} from '../mock/consts';
 import {LOCATIONS} from '../mock/locations';
 
@@ -13,11 +13,21 @@ const getRandomType = (types) => {
   return values[Math.floor(Math.random() * values.length)];
 };
 
+/**
+ * Get rand locations by event type
+ * @param {Object} eventType
+ * @return {Array}
+ */
+const getLocationsByEventType = (eventType) => {
+  const eventTypeLocations = LOCATIONS.filter((location) => location.eventTypes.has(eventType.code));
+  return shuffleArray(eventTypeLocations).slice(0, getRandomIntegerNumber(2, 4));
+};
+
 
 /**
- *
- * @param {object} type
- * @return {string}
+ * Return placeholder by type event
+ * @param {Object} type
+ * @return {String}
  */
 export const getEventPlaceholder = (type) => {
   let placeholder = ``;
@@ -35,7 +45,7 @@ export const getEventPlaceholder = (type) => {
 let lastPointDate = Date.now();
 
 /**
- *
+ * Return trip point data
  * @return {{location: *, photos: Array, price: number, description: string, dateStart: number, dateEnd: number, offers: Map, type: *}}
  */
 export const getTripPoint = () => {
@@ -84,14 +94,18 @@ export const getTripPoint = () => {
   ]);
 
   const type = getRandomType(EventTypeEnum);
+  const locations = getLocationsByEventType(type);
+  const currentLocation = locations[getRandomIntegerNumber(1, locations.length - 1)];
+
 
   return {
-    currentLocation: getRandomArrayItem(LOCATIONS),
+    currentLocation,
     price: getRandomIntegerNumber(10, 150),
+    locations,
     dateStart,
     dateEnd,
     offers,
-    type,
+    type
   };
 };
 

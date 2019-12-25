@@ -19,7 +19,6 @@ const createTripInfoTemplate = (points) => {
 
     dates = startTrip.toUpperCase();
   }
-
   const cities = points.filter((point) => point.currentLocation.type === `city`)
     .map((point) => point.currentLocation.name);
 

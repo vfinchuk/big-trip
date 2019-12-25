@@ -93,8 +93,8 @@ const createTripPointEditTemplate = (point) => {
 
   const offersList = createOffersMarkup(offers);
 
-  const transferTypes = createEventTypeMarkup(EventTypeEnum, type, `transfer`);
-  const activityTypes = createEventTypeMarkup(EventTypeEnum, type, `activity`);
+  const transferTypes = createEventTypeMarkup(EventTypeEnum, currentLocation.type, `transfer`);
+  const activityTypes = createEventTypeMarkup(EventTypeEnum, currentLocation.type, `activity`);
 
   const startTime = moment(dateStart).format(`HH:mm`);
   const endTime = moment(dateEnd).format(`HH:mm`);
@@ -198,7 +198,7 @@ export default class TripPointEdit extends AbstractSmartComponent {
     this._changePriceHandler = this._changePriceHandler.bind(this);
     this._changeDestinationHandler = this._changeDestinationHandler.bind(this);
 
-   this._subscribeEventsHandler();
+    this._subscribeEventsHandler();
   }
 
   recoveryListeners() {
@@ -281,7 +281,7 @@ export default class TripPointEdit extends AbstractSmartComponent {
    * @private
    */
   _changeDestinationHandler(evt) {
-
+    console.log(evt);
   }
 
 }

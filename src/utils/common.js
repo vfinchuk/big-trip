@@ -20,3 +20,12 @@ export const getRandomArrayItem = (array) => {
 
   return array[randomArrayIndex];
 };
+
+/**
+ *
+ * @param {Array} array
+ * @return {Array}
+ */
+export const shuffleArray = (array) => {
+  return array.sort(() => Math.random() - 0.5);
+};
