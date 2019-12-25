@@ -3,9 +3,9 @@ export const Description = `Lorem ipsum dolor sit amet, consectetur adipiscing e
 
 /**
  * @readonly
- * @enum {EventTypeEnum}
+ * @enum {EventTypes}
  */
-export const EventTypeEnum = Object.freeze({
+export const EventTypes = Object.freeze({
   BUS: {
     code: `bus`,
     group: `transfer`

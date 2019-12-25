@@ -1,7 +1,7 @@
 import {getRandomIntegerNumber, getRandomArrayItem} from '../utils/common';
-import {EventTypeEnum, Description} from './consts';
+import {EventTypes, Description} from './consts';
 
-const cityEventTypes = Object.values(EventTypeEnum)
+const cityEventTypes = Object.values(EventTypes)
   .filter((type) => type.group === `transfer`)
   .map((type) => type.code);
 

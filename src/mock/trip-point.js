@@ -1,5 +1,5 @@
 import {getRandomIntegerNumber, shuffleArray} from '../utils/common';
-import {EventTypeEnum, MillisecondsEnum} from '../mock/consts';
+import {EventTypes, MillisecondsEnum} from '../mock/consts';
 import {LOCATIONS} from '../mock/locations';
 
 /**
@@ -93,12 +93,13 @@ export const getTripPoint = () => {
     ],
   ]);
 
-  const type = getRandomType(EventTypeEnum);
+  const type = getRandomType(EventTypes);
   const locations = getLocationsByEventType(type);
   const currentLocation = locations[getRandomIntegerNumber(1, locations.length - 1)];
 
 
   return {
+    isFavorite: Math.random() >= 0.5,
     currentLocation,
     price: getRandomIntegerNumber(10, 150),
     locations,
