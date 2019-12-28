@@ -297,7 +297,7 @@ export default class TripPointEdit extends AbstractSmartComponent {
           dateFormat: `d/m/Y H:i`,
           defaultDate: pointDuration.get(input.name),
           enableTime: true,
-          time_24hr: true,
+          // time_24hr: true,
           minDate,
           minTime,
           onReady(selectedDates, dateStr, instance) {
