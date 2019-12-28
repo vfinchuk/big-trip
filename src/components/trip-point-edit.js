@@ -348,16 +348,10 @@ export default class TripPointEdit extends AbstractSmartComponent {
 
   /**
    * Select favorite point
-   * @param {Event} evt
    * @private
    */
-  _selectFavoriteHandler(evt) {
-    if (evt.target.checked === this._point.isFavorite) {
-      return;
-    }
-
-    this._point.isFavorite = evt.target.checked;
+  _selectFavoriteHandler() {
+    this._point.isFavorite = !this._point.isFavorite;
     this.rerender();
   }
-
 }
