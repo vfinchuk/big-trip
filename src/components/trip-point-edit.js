@@ -1,7 +1,10 @@
+import flatpickr from 'flatpickr';
 import AbstractSmartComponent from './abstract-smart-component';
 import {EventTypes} from '../mock/consts';
 import moment from 'moment';
 import {getEventPlaceholder, getLocationsByEventType} from '../mock/trip-point';
+
+require(`flatpickr/dist/themes/material_blue.css`);
 
 /**
  *
@@ -203,7 +206,7 @@ export default class TripPointEdit extends AbstractSmartComponent {
     super();
 
     this._point = point;
-    this._pointOld = point;
+    this._flatpickr = null;
 
     this._changePointTypeHandler = this._changePointTypeHandler.bind(this);
     this._changePriceHandler = this._changePriceHandler.bind(this);
@@ -212,6 +215,8 @@ export default class TripPointEdit extends AbstractSmartComponent {
     this._selectFavoriteHandler = this._selectFavoriteHandler.bind(this);
 
     this._subscribeEventsHandler();
+
+    this._applyFlatpickr();
   }
 
   recoveryListeners() {
@@ -222,6 +227,25 @@ export default class TripPointEdit extends AbstractSmartComponent {
     return createTripPointEditTemplate(this._point);
   }
 
+  /**
+   *
+   */
+  rerender() {
+    super.rerender();
+  }
+
+  /**
+   *
+   */
+  reset() {
+    const point = this._point;
+    // TODO how reset data ?
+  }
+
+  /**
+   *
+   * @private
+   */
   _subscribeEventsHandler() {
     const element = this.getElement();
 
@@ -243,15 +267,44 @@ export default class TripPointEdit extends AbstractSmartComponent {
       .addEventListener(`click`, this._selectFavoriteHandler);
   }
 
+  /**
+   * Render Flatpickr
+   * @private
+   */
+  _applyFlatpickr() {
+    if (this._flatpickr) {
+      this._flatpickr.destroy();
+      this._flatpickr = null;
+    }
 
-  rerender() {
-    super.rerender();
-  }
+    const pointDuration = new Map([
+      [`event-start-time`, this._point.dateStart],
+      [`event-end-time`, this._point.dateEnd]
+    ]);
 
-  reset() {
-    const point = this._point;
-    console.log(this.getElement());
-    // TODO how reset data ?
+    this.getElement().querySelectorAll(`.event__input--time`)
+      .forEach((input) => {
+        let minDate = null;
+        let minTime = null;
+
+        if (input.name === `event-end-time`) {
+          minDate = pointDuration.get(`event-start-time`);
+          minTime = moment(pointDuration.get(`event-start-time`)).format(`H:m`);
+        }
+
+        this._flatpickr = flatpickr(input, {
+          allowInput: true,
+          dateFormat: `d/m/Y H:i`,
+          defaultDate: pointDuration.get(input.name),
+          enableTime: true,
+          time_24hr: true,
+          minDate,
+          minTime,
+          onReady(selectedDates, dateStr, instance) {
+            instance.close();
+          },
+        });
+      });
   }
 
   /**
