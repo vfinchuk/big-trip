@@ -1,5 +1,6 @@
-import {getRandomArrayItem, getRandomIntegerNumber} from '../utils/common';
-import {Description, EventTypeEnum, LOCATIONS, MillisecondsEnum} from '../mock/consts';
+import {getRandomIntegerNumber, shuffleArray} from '../utils/common';
+import {EventTypes, MillisecondsEnum} from '../mock/consts';
+import {LOCATIONS} from '../mock/locations';
 
 /**
  *
@@ -13,27 +14,20 @@ const getRandomType = (types) => {
 };
 
 /**
- *
- * @param {string} description
- * @return {string}
+ * Get rand locations by event type
+ * @param {Object} eventType
+ * @return {Array}
  */
-const generateDescription = (description) => {
-  const sentences = description.split(`. `);
-
-  let result = ``;
-
-  for (let i = 1; i <= getRandomIntegerNumber(1, 3); i++) {
-    result += `${getRandomArrayItem(sentences)}.`;
-  }
-
-  return result;
+export const getLocationsByEventType = (eventType) => {
+  const eventTypeLocations = LOCATIONS.filter((location) => location.eventTypes.has(eventType.code));
+  return shuffleArray(eventTypeLocations).slice(0, getRandomIntegerNumber(2, 4));
 };
 
 
 /**
- *
- * @param {object} type
- * @return {string}
+ * Return placeholder by type event
+ * @param {Object} type
+ * @return {String}
  */
 export const getEventPlaceholder = (type) => {
   let placeholder = ``;
@@ -47,22 +41,11 @@ export const getEventPlaceholder = (type) => {
   return placeholder;
 };
 
-/**
- *
- * @param {array} locations
- * @param {object} eventType
- * @return {*}
- */
-const getRandomLocation = (locations, eventType) => {
-  locations = locations.filter((location) => location.eventTypes.has(eventType));
-
-  return locations[Math.floor(Math.random() * locations.length)];
-};
 
 let lastPointDate = Date.now();
 
 /**
- *
+ * Return trip point data
  * @return {{location: *, photos: Array, price: number, description: string, dateStart: number, dateEnd: number, offers: Map, type: *}}
  */
 export const getTripPoint = () => {
@@ -110,17 +93,20 @@ export const getTripPoint = () => {
     ],
   ]);
 
-  const type = getRandomType(EventTypeEnum);
+  const type = getRandomType(EventTypes);
+  const locations = getLocationsByEventType(type);
+  const currentLocation = locations[getRandomIntegerNumber(1, locations.length - 1)];
+
 
   return {
-    location: getRandomLocation(LOCATIONS, type.code),
-    photos: new Array(5).fill(``).map(() => `http://picsum.photos/300/150?r=${Math.random()}`),
+    isFavorite: Math.random() >= 0.5,
+    currentLocation,
     price: getRandomIntegerNumber(10, 150),
-    description: generateDescription(Description),
+    locations,
     dateStart,
     dateEnd,
     offers,
-    type,
+    type
   };
 };
 
@@ -141,7 +127,6 @@ export const getTripPoints = (count) => {
  * @return {*}
  */
 export const groupTripPointsByDay = (points) => {
-  let counter = 1;
   return points.reduce((days, point) => {
     let currentDay = new Date(point.dateStart).setHours(0, 0, 0, 0);
 
@@ -150,11 +135,8 @@ export const groupTripPointsByDay = (points) => {
     } else {
       days.set(currentDay, {
         date: point.dateStart,
-        counter,
         points: [point],
       });
-
-      counter++;
     }
 
     return days;

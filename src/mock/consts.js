@@ -3,9 +3,9 @@ export const Description = `Lorem ipsum dolor sit amet, consectetur adipiscing e
 
 /**
  * @readonly
- * @enum {EventTypeEnum}
+ * @enum {EventTypes}
  */
-export const EventTypeEnum = Object.freeze({
+export const EventTypes = Object.freeze({
   BUS: {
     code: `bus`,
     group: `transfer`
@@ -47,87 +47,6 @@ export const EventTypeEnum = Object.freeze({
     group: `activity`
   }
 });
-
-const cityEventTypes = Object.values(EventTypeEnum)
-  .filter((type) => type.group === `transfer`)
-  .map((type) => type.code);
-
-/**
- * @readonly
- * @const {Array} Predefined list of available locations.
- */
-export const LOCATIONS = [
-  {
-    name: `Amsterdam`,
-    type: `city`,
-    eventTypes: new Set(cityEventTypes)
-  },
-  {
-    name: `Berlin`,
-    type: `city`,
-    eventTypes: new Set(cityEventTypes)
-  },
-  {
-    name: `Stockholm`,
-    type: `city`,
-    eventTypes: new Set(cityEventTypes)
-  },
-  {
-    name: `Amsterdam`,
-    type: `city`,
-    eventTypes: new Set(cityEventTypes)
-  },
-  {
-    name: `Geneva`,
-    type: `city`,
-    eventTypes: new Set(cityEventTypes)
-  },
-  {
-    name: `Barcelona`,
-    type: `city`,
-    eventTypes: new Set(cityEventTypes)
-  },
-  {
-    name: `Airport-1`,
-    type: `airport`,
-    eventTypes: new Set([`train`, `taxi`, `drive`])
-  },
-  {
-    name: `Airport-2`,
-    type: `airport`,
-    eventTypes: new Set([`train`, `taxi`, `drive`])
-  },
-  {
-    name: `Restaurant 1`,
-    type: `restaurant`,
-    eventTypes: new Set([`train`, `taxi`, `drive`, `restaurant`]),
-  },
-  {
-    name: `Restaurant 2`,
-    type: `restaurant`,
-    eventTypes: new Set([`train`, `taxi`, `drive`, `restaurant`]),
-  },
-  {
-    name: `Hotel 1`,
-    type: `hotel`,
-    eventTypes: new Set([`train`, `taxi`, `drive`, `check-in`]),
-  },
-  {
-    name: `Hotel 2`,
-    type: `hotel`,
-    eventTypes: new Set([`train`, `taxi`, `drive`, `check-in`]),
-  },
-  {
-    name: `Museum 1`,
-    type: `hotel`,
-    eventTypes: new Set([`train`, `taxi`, `drive`, `sightseeing`]),
-  },
-  {
-    name: `Museum 2`,
-    type: `hotel`,
-    eventTypes: new Set([`train`, `taxi`, `drive`, `sightseeing`]),
-  }
-];
 
 
 /**
