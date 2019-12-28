@@ -95,7 +95,7 @@ export default class PointController {
 
   /**
    *
-   * @param evt
+   * @param {Event} evt
    * @private
    */
   _onEscapeKeyDown(evt) {

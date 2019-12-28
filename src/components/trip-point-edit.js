@@ -238,7 +238,7 @@ export default class TripPointEdit extends AbstractSmartComponent {
    *
    */
   reset() {
-    const point = this._point;
+    // const point = this._point;
     // TODO how reset data ?
   }
 

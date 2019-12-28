@@ -55,6 +55,8 @@ export default class TripController {
   /**
    * Rendering trip points
    * @param {Array} points
+   *
+   * @return {Array}
    * @private
    */
   _renderTripPoints(points) {
